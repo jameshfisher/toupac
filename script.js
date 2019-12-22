@@ -20,7 +20,7 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
-const DRAW_HIT_BOXES = false;
+const DRAW_HIT_BOXES = true;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -52,9 +52,9 @@ function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
 }
 
-function drawRect(dx, dy, dw, dh) {
+function drawRect(color, dx, dy, dw, dh) {
   console.log("drawRect", dx, dy, dw, dh);
-  ctx.fillStyle = "hsla(0,100%,50%,50%)";
+  ctx.fillStyle = color;
   ctx.fillRect(dx, dy, dw, dh);
 }
 
@@ -95,6 +95,15 @@ function getCatHitBox() {
     right: state.catWorldX + 27,
     top: state.catHeight + 20,
     bottom: state.catHeight + 7
+  };
+}
+
+function getCatFeetHitBox() {
+  return {
+    left: state.catWorldX + 7,
+    right: state.catWorldX + 25,
+    top: state.catHeight + 7,
+    bottom: state.catHeight + 4
   };
 }
 
@@ -213,8 +222,9 @@ function drawState() {
 
   // Draw hit boxes (DEBUG)
   if (DRAW_HIT_BOXES) {
-    function drawHitBox(hitBox) {
+    function drawHitBox(color, hitBox) {
       drawRect(
+        color,
         worldXToScreenX(hitBox.left),
         worldHeightToScreenY(hitBox.top),
         hitBox.right - hitBox.left,
@@ -222,9 +232,10 @@ function drawState() {
       );
     }
     const catHitBox = getCatHitBox();
-    drawHitBox(getCatHitBox());
+    drawHitBox("hsla(0,100%,50%,50%)", getCatHitBox());
+    drawHitBox("hsla(200,100%,50%,50%)", getCatFeetHitBox());
     for (let bee of state.bees) {
-      drawHitBox(getBeeHitBox(bee));
+      drawHitBox("hsla(0,100%,50%,50%)", getBeeHitBox(bee));
     }
   }
 
@@ -300,7 +311,7 @@ function doCatLivingCalcs() {
       boxesIntersect(catHitBox, getBeeHitBox(bee)) &&
       boxDidBounce(catHitBox, getBeeHitBox(bee))
   );
-  if (bouncingBees.length > 0 && state.catVelocityDown > 0) {
+  if (state.catVelocityDown > 0 bouncingBees.length > 0 && ) {
     state.catVelocityDown = -3;
   } else {
     for (let bee of state.bees) {
