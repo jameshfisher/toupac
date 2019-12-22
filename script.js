@@ -10,6 +10,9 @@ const BEE_SPRITE_H = 10;
 const BG_W = 48;
 const BG_H = 48;
 
+const ASCII_W = 512;
+const ASCII_H = 256;
+
 const CANVAS_W = 192;
 const CANVAS_H = 108;
 
@@ -40,7 +43,7 @@ beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
 const asciiImageEl = new Image();
 asciiImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577028538009";
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
@@ -50,6 +53,16 @@ function drawRect(dx, dy, dw, dh) {
   console.log("drawRect", dx, dy, dw, dh);
   ctx.fillStyle = "hsla(0,100%,50%,50%)";
   ctx.fillRect(dx, dy, dw, dh);
+}
+
+function drawText(text) {
+  for (let i in text) {
+    
+    const charCode = charCodeAt(c); 
+    const row = Math.floor(charCode / 16);
+    const col = charCode % 16;
+    draw(asciiImageEl, 0, 0, 8, 8, 8*i, 0); 
+  }
 }
 
 function isInBox(box, pt) {
@@ -182,6 +195,10 @@ function drawState() {
       drawHitBox(getBeeHitBox(bee));
     }
   }
+
+  // Draw text
+
+  draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
 function doCatDeadCalcs() {
