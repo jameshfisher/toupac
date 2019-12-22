@@ -85,8 +85,10 @@ for (const [name, url] of Object.entries({
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066",
   land:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196",
-  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730",
-  bee: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204",
+  butterfly:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730",
+  bee:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -277,7 +279,7 @@ function drawState() {
 
   // Draw text
   drawText((state.frameNum + state.butterfliesEaten * 100).toString(), 1, 1);
-  // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
+  drawText(state.catLives.toString(), 1, 10);
 }
 
 function doCatDeadCalcs() {
@@ -302,7 +304,8 @@ function doCatLivingCalcs() {
   state.catHeight -= state.catVelocityDown;
   if (state.catHeight <= 0) {
     state.catHeight = 0;
-    if (state.catVelocityDown > 1) { // physics is hard
+    if (state.catVelocityDown > 1) {
+      // physics is hard
       playSound("land");
     }
     state.catVelocityDown = 0;
@@ -363,22 +366,27 @@ function doCatLivingCalcs() {
     state.catVelocityDown = -3;
     playSound("jump");
   } else {
-    for (let bee of state.bees) {
-      if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
-        state.catDiedAtFrameNum = state.frameNum;
-        playSound("bee");
-      }
-    }
+    const survivingBees = state.bees.filter(
+      bee => !boxesIntersect(catHitBox, getBeeHitBox(bee))
+    );
+    const numBeesEaten = state.bees.length - survivingBees.length;
+    state.bees = survivingBees;
+    state.catLives -= numBeesEaten;
+    if (state.catLives <= 0) state.catDiedAtFrameNum = state.frameNum;
+    if (numBeesEaten > 0) playSound("bee");
   }
 
   // Kill butterflies
   const survivingButterflies = state.butterflies.filter(
     butterfly => !boxesIntersect(catHitBox, getButterflyHitBox(butterfly))
   );
-  const numButterfliesEaten = state.butterflies.length - survivingButterflies.length;
+  const numButterfliesEaten =
+    state.butterflies.length - survivingButterflies.length;
   state.butterfliesEaten += numButterfliesEaten;
   state.butterflies = survivingButterflies;
-  if (numButterfliesEaten > 0) { playSound("butterfly"); }
+  if (numButterfliesEaten > 0) {
+    playSound("butterfly");
+  }
 }
 
 function doFrame() {
