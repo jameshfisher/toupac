@@ -59,7 +59,6 @@ function drawRect(color, dx, dy, dw, dh) {
 
 function drawText(text, sx, sy) {
   for (let i = 0; i < text.length; i++) {
-    console.log("drawing", text[i]);
     const charCode = text.charCodeAt(i);
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
@@ -67,22 +66,29 @@ function drawText(text, sx, sy) {
   }
 }
 
-window.AudioContext = window.AudioContext||window.webkitAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 async function loadSound(url) {
   const response = await fetch(url);
-  const arrayBuffer = response.arrayBufer();
-  return await context.decodeAudioData(arrayBuffer);
+  const arrayBuffer = await response.arrayBuffer();
+  return await audioCtx.decodeAudioData(arrayBuffer);
 }
-function playSound(buffer) {
+function playBuffer(buffer) {
   const source = audioCtx.createBufferSource();
   source.buffer = buffer;
   source.connect(audioCtx.destination);
   source.start(0);
 }
-const jumpSound = loadSound("https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066");
-async function playJumpSound() {
-  playSound(await jumpSound);
+const sounds = {};
+for (const [name, url] of Object.entries({
+  jump:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066",
+  land:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196"
+}))
+  sounds[name] = loadSound(url);
+async function playSound(name) {
+  playBuffer(await sounds[name]);
 }
 
 let state = {};
@@ -144,7 +150,9 @@ function furthestBeeWorldX() {
   return state.bees.length ? state.bees[state.bees.length - 1].worldX : 50;
 }
 function furthestButterflyWorldX() {
-  return state.butterflies.length ? state.butterflies[state.butterflies.length - 1].worldX : 50;
+  return state.butterflies.length
+    ? state.butterflies[state.butterflies.length - 1].worldX
+    : 50;
 }
 
 function isInBox(box, pt) {
@@ -281,7 +289,7 @@ function doCatLivingCalcs() {
     state.catVelocityDown = -5;
     state.jumpRequested = false;
     state.jumpFrameNum = state.frameNum;
-    playJumpSound();
+    playSound("jump");
   }
   if ((state.frameNum - state.jumpFrameNum) % 4 === 0) {
     state.catVelocityDown += 1; // gravity
@@ -291,6 +299,9 @@ function doCatLivingCalcs() {
   state.catHeight -= state.catVelocityDown;
   if (state.catHeight <= 0) {
     state.catHeight = 0;
+    if (state.catVelocityDown > 1) { // physics is hard
+      playSound("land");
+    }
     state.catVelocityDown = 0;
   }
 
@@ -347,6 +358,7 @@ function doCatLivingCalcs() {
   if (state.catVelocityDown > 0 && footBees.length > 0) {
     // Jump off the bee
     state.catVelocityDown = -3;
+    playSound("jump");
   } else {
     for (let bee of state.bees) {
       if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
