@@ -13,7 +13,7 @@ const CANVAS_H = 108;
 
 const ZOOM = 5;
 
-const GROUND = 48;
+const GROUND = 72;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -22,7 +22,7 @@ canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
 const ctx = canvasEl.getContext("2d");
 
-ctx.strokeStyle = "black";
+ctx.strokeStyle = "red";
 
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
@@ -42,6 +42,7 @@ function draw(imageEl, sx, sy, sw, sh, dx, dy) {
 }
 
 function drawRect(dx, dy, dw, dh) {
+  console.log("drawRect", dx, dy, dw, dh);
   ctx.strokeRect(dx, dy, dw, dh);
 }
 
@@ -74,8 +75,8 @@ resetState();
 function getCatHitBox() {
   return {
     left: state.catWorldX + 5,
-    right: state.catWorldX + 20,
-    top: state.catHeight + 20,
+    right: state.catWorldX + 25,
+    top: state.catHeight,
     bottom: state.catHeight + 10
   };
 }
@@ -90,7 +91,7 @@ function drawState() {
   }
   
   const worldXToScreenX = worldX => (worldX - state.catWorldX) + 20;
-  
+  const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
@@ -115,7 +116,7 @@ function drawState() {
       JUMP_SPRITE_W,
       SPRITE_H,
       worldXToScreenX(state.catWorldX),
-      GROUND - state.catHeight
+      worldHeightToScreenY(state.catHeight)-SPRITE_H
     );
   } else {
     draw(
@@ -125,7 +126,7 @@ function drawState() {
       SPRITE_W,
       SPRITE_H,
       worldXToScreenX(state.catWorldX) + 4,
-      GROUND - state.catHeight
+      worldHeightToScreenY(state.catHeight)-SPRITE_H
     );
   }
 
@@ -138,13 +139,18 @@ function drawState() {
       11,
       10,
       20 + (bee.worldX - state.catWorldX),
-      GROUND - bee.height
+      worldHeightToScreenY(bee.height)
     );
   }
   
   // Draw hit boxes (DEBUG)
   const catHitBox = getCatHitBox();
-  drawRect();
+  drawRect(
+    worldXToScreenX(catHitBox.left),
+    worldHeightToScreenY(catHitBox.top),
+    catHitBox.right - catHitBox.left,
+    catHitBox.top - catHitBox.bottom
+  );
 }
 
 function doCatDeadCalcs() {
