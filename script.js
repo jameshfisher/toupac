@@ -20,7 +20,7 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
-const DRAW_HIT_BOXES = false;
+const DRAW_HIT_BOXES = true;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -37,7 +37,7 @@ backgroundImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
 const horizonImageEl = new Image();
 horizonImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577041644420";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
 const beeImageEl = new Image();
 beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
@@ -93,7 +93,7 @@ function getCatHitBox() {
   return {
     left: state.catWorldX + 20,
     right: state.catWorldX + 27,
-    top: state.catHeight + 20,
+    top: state.catHeight + 19,
     bottom: state.catHeight + 9
   };
 }
@@ -121,7 +121,7 @@ function getButterflyHitBox(b) {
     left: b.worldX + 2,
     right: b.worldX + 11,
     top: b.height + 14,
-    bottom: b.height + 3
+    bottom: b.height + 4
   };
 }
 
@@ -365,7 +365,7 @@ function doFrame() {
 catSpriteImageEl.addEventListener("load", () => {
   function loop() {
     doFrame();
-    window.setTimeout(() => window.requestAnimationFrame(loop), 60);
+    window.setTimeout(() => window.requestAnimationFrame(loop), 50);
   }
   window.requestAnimationFrame(loop);
 });
