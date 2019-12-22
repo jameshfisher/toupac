@@ -56,12 +56,14 @@ function drawRect(dx, dy, dw, dh) {
 }
 
 function drawText(text) {
-  for (let i in text) {
-    
-    const charCode = charCodeAt(c); 
+  for (let i = 0; i < text.length; i++) {
+    console.log("drawing", text[i]);
+    const charCode = text.charCodeAt(i);
+    console.log(text[i], "has charcode", charCode);
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
-    draw(asciiImageEl, 0, 0, 8, 8, 8*i, 0); 
+    console.log("Finding", text[i], "at", row, col);
+    draw(asciiImageEl, col*8, row*8, 8, 8, 8*i, 0); 
   }
 }
 
@@ -197,8 +199,8 @@ function drawState() {
   }
 
   // Draw text
-
-  draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
+  drawText("A");
+  // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
 function doCatDeadCalcs() {
