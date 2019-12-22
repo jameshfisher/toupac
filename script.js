@@ -23,16 +23,33 @@ canvasEl.style.width = CANVAS_W * ZOOM + "px";
 const ctx = canvasEl.getContext("2d");
 
 const catSpriteImageEl = new Image();
-catSpriteImageEl.src = "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577014873971";
+catSpriteImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577014873971";
 const backgroundImageEl = new Image();
-backgroundImageEl.src = "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
+backgroundImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
 const horizonImageEl = new Image();
-horizonImageEl.src = "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577014866007";
+horizonImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577014866007";
 const beeImageEl = new Image();
-beeImageEl.src = "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
+beeImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
+}
+
+function drawRect(dx, dy, dw, dh) {
+  ctx.strokeRect(dx, dy, dw, dh);
+}
+
+function isInBox(box, pt) {
+  return (
+    pt.x >= box.left &&
+    pt.x <= box.right &&
+    pt.y >= box.bottom &&
+    pt.y <= box.top
+  );
 }
 
 let state = {};
@@ -46,19 +63,19 @@ function resetState() {
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
-    bees: [],
+    bees: []
   };
 }
 
 resetState();
 
-function doCatDeadFrame() {
+function doCatDeadCalcs() {
   resetState();
 }
 
-function doCatLivingFrame() {
-  state.catWorldX += SPRITE_SPEED_PX; 
-  
+function doCatLivingCalcs() {
+  state.catWorldX += SPRITE_SPEED_PX;
+
   // Change velocity
   if (state.jumpRequested && state.catHeight === 0) {
     state.catVelocityDown = -5;
@@ -75,14 +92,6 @@ function doCatLivingFrame() {
     state.catHeight = 0;
     state.catVelocityDown = 0;
   }
-  
-  // Kill cat
-  let catHeadBox = { left:  }
-  for (let bee of state.bees) {
-    if (isInBox(catHeadBox, bee)) {
-      
-    }
-  }
 
   // Change bee positions
   for (let bee of state.bees) {
@@ -90,8 +99,8 @@ function doCatLivingFrame() {
   }
 
   // Introduce future bees (important: in order)
-  if (Math.random() < 0.015) {
-    state.bees.push({ worldX: state.catWorldX+150, height: 4 });
+  if (Math.random() < 0.115) {
+    state.bees.push({ worldX: state.catWorldX + 150, height: 4 });
   }
 
   // Remove past bees
@@ -99,73 +108,30 @@ function doCatLivingFrame() {
     state.bees.shift();
   }
 
+  // Kill cat
+  let catHitBox = {
+    left: state.catWorldX + 5,
+    right: state.catWorldX + 20,
+    top: state.catHeight + 20,
+    bottom: state.catHeight + 10
+  };
+  for (let bee of state.bees) {
+    if (isInBox(catHitBox, { x: bee.worldX, y: bee.height })) {
+      state.catDiedAtFrameNum = state.frameNum;
+    }
+  }
+
   // DRAWING
 
-  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-
-  // Horizon, doesn't move
-  for (let i = 0; i < 5; i++) {
-    draw(horizonImageEl, 0, 0, 48, 48, 48 * i, 0);
-  }
-
-  // Draw ground, scrolls with cat
-  const bgScreenX = -(state.catWorldX % BG_W);
-  for (let i = 0; i < 5; i++) {
-    draw(
-      backgroundImageEl,
-      0,
-      0,
-      BG_W,
-      BG_H,
-      bgScreenX + BG_W * i,
-      GROUND - 12
-    );
-  }
-
-  // Draw cat
-  if (state.catHeight != 0) {
-    draw(
-      catSpriteImageEl,
-      SPRITE_W * 4,
-      0,
-      JUMP_SPRITE_W,
-      SPRITE_H,
-      20,
-      GROUND - state.catHeight
-    );
-  } else {
-    draw(
-      catSpriteImageEl,
-      SPRITE_W * (state.frameNum % SPRITE_NUM_FRAMES),
-      0,
-      SPRITE_W,
-      SPRITE_H,
-      24,
-      GROUND - state.catHeight
-    );
-  }
-
-  // Draw bees
-  for (let bee of state.bees) {
-    draw(
-      beeImageEl,
-      0,
-      0,
-      11,
-      10,
-      20 + (bee.worldX - state.catWorldX),
-      GROUND - bee.height
-    );
-  }
 }
 
 function doFrame() {
   state.frameNum++;
 
   if (state.catDiedAtFrameNum) {
-    doCatDeadFrame();
+    doCatDeadCalcs();
   } else {
-    doCatLivingFrame();
+    doCatLivingCalcs();
   }
 }
 
