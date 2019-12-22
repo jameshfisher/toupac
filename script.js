@@ -22,6 +22,8 @@ canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
 const ctx = canvasEl.getContext("2d");
 
+ctx.strokeStyle = "black";
+
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577014873971";
@@ -69,6 +71,15 @@ function resetState() {
 
 resetState();
 
+function getCatHitBox() {
+  return {
+    left: state.catWorldX + 5,
+    right: state.catWorldX + 20,
+    top: state.catHeight + 20,
+    bottom: state.catHeight + 10
+  };
+}
+
 function drawState() {
   
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
@@ -77,6 +88,9 @@ function drawState() {
   for (let i = 0; i < 5; i++) {
     draw(horizonImageEl, 0, 0, 48, 48, 48 * i, 0);
   }
+  
+  const worldXToScreenX = worldX => (worldX - state.catWorldX) + 20;
+  
 
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
@@ -100,7 +114,7 @@ function drawState() {
       0,
       JUMP_SPRITE_W,
       SPRITE_H,
-      20,
+      worldXToScreenX(state.catWorldX),
       GROUND - state.catHeight
     );
   } else {
@@ -110,7 +124,7 @@ function drawState() {
       0,
       SPRITE_W,
       SPRITE_H,
-      24,
+      worldXToScreenX(state.catWorldX) + 4,
       GROUND - state.catHeight
     );
   }
@@ -127,6 +141,10 @@ function drawState() {
       GROUND - bee.height
     );
   }
+  
+  // Draw hit boxes (DEBUG)
+  const catHitBox = getCatHitBox();
+  drawRect();
 }
 
 function doCatDeadCalcs() {
@@ -169,12 +187,7 @@ function doCatLivingCalcs() {
   }
 
   // Kill cat
-  let catHitBox = {
-    left: state.catWorldX + 5,
-    right: state.catWorldX + 20,
-    top: state.catHeight + 20,
-    bottom: state.catHeight + 10
-  };
+  let catHitBox = getCatHitBox();
   for (let bee of state.bees) {
     if (isInBox(catHitBox, { x: bee.worldX, y: bee.height })) {
       state.catDiedAtFrameNum = state.frameNum;
