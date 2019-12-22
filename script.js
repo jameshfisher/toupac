@@ -70,6 +70,19 @@ function drawText(text, sx, sy) {
   }
 }
 
+var audioContext;
+window.addEventListener('load', init, false);
+function init() {
+  try {
+    // Fix up for prefixing
+    window.AudioContext = window.AudioContext||window.webkitAudioContext;
+    audioContext = new AudioContext();
+  }
+  catch(e) {
+    alert('Web Audio API is not supported in this browser');
+  }
+}
+
 let state = {};
 
 function resetState() {
