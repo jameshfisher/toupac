@@ -5,6 +5,8 @@ const SPRITE_SPEED_PX = 2;
 
 const JUMP_SPRITE_W = 32;
 
+const BEE_SPRITE_H = 10;
+
 const BG_W = 48;
 const BG_H = 48;
 
@@ -22,7 +24,6 @@ canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
 const ctx = canvasEl.getContext("2d");
 
-ctx.strokeStyle = "red";
 
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
@@ -43,7 +44,8 @@ function draw(imageEl, sx, sy, sw, sh, dx, dy) {
 
 function drawRect(dx, dy, dw, dh) {
   console.log("drawRect", dx, dy, dw, dh);
-  ctx.strokeRect(dx, dy, dw, dh);
+  ctx.fillStyle = "hsla(0,100%,50%,50%)";
+  ctx.fillRect(dx, dy, dw, dh);
 }
 
 function isInBox(box, pt) {
@@ -74,10 +76,19 @@ resetState();
 
 function getCatHitBox() {
   return {
-    left: state.catWorldX + 5,
-    right: state.catWorldX + 25,
-    top: state.catHeight,
-    bottom: state.catHeight + 10
+    left: state.catWorldX + 10,
+    right: state.catWorldX + 27,
+    top: state.catHeight + 20,
+    bottom: state.catHeight + 7
+  };
+}
+
+function getBeeHitBox(bee) {
+  return {
+    left: bee.worldX,
+    right: bee.worldX+11,
+    top: bee.height+10,
+    bottom: bee.height
   };
 }
 
@@ -103,7 +114,7 @@ function drawState() {
       BG_W,
       BG_H,
       bgScreenX + BG_W * i,
-      GROUND - 12
+      worldHeightToScreenY(0)-32
     );
   }
 
@@ -139,11 +150,19 @@ function drawState() {
       11,
       10,
       20 + (bee.worldX - state.catWorldX),
-      worldHeightToScreenY(bee.height)
+      worldHeightToScreenY(bee.height)-BEE_SPRITE_H
     );
   }
   
   // Draw hit boxes (DEBUG)
+  function drawHitBox(hitBox) {
+    drawRect(
+      worldXToScreenX(hitBox.left),
+      worldHeightToScreenY(hitBox.top),
+      hitBox.right - hitBox.left,
+      hitBox.top - hitBox.bottom
+    ); 
+  }
   const catHitBox = getCatHitBox();
   drawRect(
     worldXToScreenX(catHitBox.left),
@@ -151,6 +170,9 @@ function drawState() {
     catHitBox.right - catHitBox.left,
     catHitBox.top - catHitBox.bottom
   );
+  for (let bee of state.bees) {
+    draw
+  }
 }
 
 function doCatDeadCalcs() {
