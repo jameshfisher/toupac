@@ -37,7 +37,7 @@ backgroundImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
 const horizonImageEl = new Image();
 horizonImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577014866007";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577041644420";
 const beeImageEl = new Image();
 beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
@@ -128,6 +128,9 @@ function getButterflyHitBox(b) {
 function furthestBeeWorldX() {
   return state.bees.length ? state.bees[state.bees.length - 1].worldX : 50;
 }
+function furthestButterflyWorldX() {
+  return state.butterflies.length ? state.butterflies[state.butterflies.length - 1].worldX : 50;
+}
 
 function isInBox(box, pt) {
   return (
@@ -159,7 +162,7 @@ function drawState() {
 
   // Horizon, doesn't move
   for (let i = 0; i < 5; i++) {
-    draw(horizonImageEl, 0, 0, 48, 48, 48 * i, 0);
+    draw(horizonImageEl, 0, 0, 48, 96, 48 * i, 0);
   }
 
   // Draw ground, scrolls with cat
@@ -288,12 +291,16 @@ function doCatLivingCalcs() {
   while (furthestBeeWorldX() < state.catWorldX + 150) {
     const furthest = furthestBeeWorldX();
     state.bees.push({
-      worldX: furthest + Math.round(10 + Math.random() * 100),
+      worldX: furthest + Math.round(10 + Math.random() * 150),
       height: Math.round(Math.random() * 50)
     });
   }
-  if (Math.random() < 0.02) {
-    state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
+  while (furthestButterflyWorldX() < state.catWorldX + 150) {
+    const furthest = furthestButterflyWorldX();
+    state.butterflies.push({
+      worldX: furthest + Math.round(10 + Math.random() * 150),
+      height: Math.round(Math.random() * 50)
+    });
   }
 
   // Remove past bees
