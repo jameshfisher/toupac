@@ -41,6 +41,9 @@ horizonImageEl.src =
 const beeImageEl = new Image();
 beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
+const butterflyImageEl = new Image();
+butterflyImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577035563272";
 const asciiImageEl = new Image();
 asciiImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441";
@@ -87,7 +90,8 @@ function resetState() {
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
-    bees: []
+    bees: [],
+    butterflies: []
   };
 }
 
@@ -102,12 +106,21 @@ function getCatHitBox() {
   };
 }
 
-function getBeeHitBox(bee) {
+function getBeeHitBox(b) {
   return {
-    left: bee.worldX,
-    right: bee.worldX + 11,
-    top: bee.height + 10,
-    bottom: bee.height
+    left: b.worldX,
+    right: b.worldX + 11,
+    top: b.height + 10,
+    bottom: b.height
+  };
+}
+
+function getButterflyHitBox(b) {
+  return {
+    left: b.worldX,
+    right: b.worldX + 11,
+    top: b.height + 10,
+    bottom: b.height
   };
 }
 
@@ -180,6 +193,18 @@ function drawState() {
       worldHeightToScreenY(bee.height) - BEE_SPRITE_H
     );
   }
+  
+  for (let butterfly of state.butterflies) {
+    draw(
+      butterflyImageEl,
+      0,
+      0,
+      16,
+      16,
+      20 + (butterfly.worldX - state.catWorldX),
+      worldHeightToScreenY(butterfly.height) - 16
+    );
+  }
 
   // Draw hit boxes (DEBUG)
   if (DRAW_HIT_BOXES) {
@@ -238,8 +263,18 @@ function doCatLivingCalcs() {
   }
 
   // Remove past bees
-  while (state.bees.length > 0 && state.bees[0].beeIndex < 0) {
+  while (state.bees.length > 0 && state.bees[0].worldX < state.catWorldX-100) {
     state.bees.shift();
+  }
+  
+  // Butterflies
+  if (Math.random() < 0.01) {
+    state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
+  }
+  
+  // Remove past butterflies
+  while (state.butterflies.length > 0 && state.butterflies[0].worldX < state.catWorldX-100) {
+    state.butterflies.shift();
   }
 
   // Kill cat
