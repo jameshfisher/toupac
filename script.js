@@ -17,13 +17,14 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
+const DRAW_HIT_BOXES = true;
+
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
 canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
 const ctx = canvasEl.getContext("2d");
-
 
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
@@ -36,6 +37,9 @@ horizonImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577014866007";
 const beeImageEl = new Image();
 beeImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
+const asciiImageEl = new Image();
+asciiImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
@@ -86,28 +90,31 @@ function getCatHitBox() {
 function getBeeHitBox(bee) {
   return {
     left: bee.worldX,
-    right: bee.worldX+11,
-    top: bee.height+10,
+    right: bee.worldX + 11,
+    top: bee.height + 10,
     bottom: bee.height
   };
 }
 
 function boxesIntersect(b1, b2) {
-  return b1.bottom < b2.top && b2.bottom < b1.top
-    && b1.left < b2.right && b2.left < b1.right;
+  return (
+    b1.bottom < b2.top &&
+    b2.bottom < b1.top &&
+    b1.left < b2.right &&
+    b2.left < b1.right
+  );
 }
 
+const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
+const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
+
 function drawState() {
-  
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
   // Horizon, doesn't move
   for (let i = 0; i < 5; i++) {
     draw(horizonImageEl, 0, 0, 48, 48, 48 * i, 0);
   }
-  
-  const worldXToScreenX = worldX => (worldX - state.catWorldX) + 20;
-  const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
@@ -119,7 +126,7 @@ function drawState() {
       BG_W,
       BG_H,
       bgScreenX + BG_W * i,
-      worldHeightToScreenY(0)-32
+      worldHeightToScreenY(0) - 32
     );
   }
 
@@ -132,7 +139,7 @@ function drawState() {
       JUMP_SPRITE_W,
       SPRITE_H,
       worldXToScreenX(state.catWorldX),
-      worldHeightToScreenY(state.catHeight)-SPRITE_H
+      worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else {
     draw(
@@ -142,7 +149,7 @@ function drawState() {
       SPRITE_W,
       SPRITE_H,
       worldXToScreenX(state.catWorldX) + 4,
-      worldHeightToScreenY(state.catHeight)-SPRITE_H
+      worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   }
 
@@ -155,23 +162,25 @@ function drawState() {
       11,
       10,
       20 + (bee.worldX - state.catWorldX),
-      worldHeightToScreenY(bee.height)-BEE_SPRITE_H
+      worldHeightToScreenY(bee.height) - BEE_SPRITE_H
     );
   }
-  
+
   // Draw hit boxes (DEBUG)
-  function drawHitBox(hitBox) {
-    drawRect(
-      worldXToScreenX(hitBox.left),
-      worldHeightToScreenY(hitBox.top),
-      hitBox.right - hitBox.left,
-      hitBox.top - hitBox.bottom
-    ); 
-  }
-  const catHitBox = getCatHitBox();
-  drawHitBox(getCatHitBox());
-  for (let bee of state.bees) {
-    drawHitBox(getBeeHitBox(bee));
+  if (DRAW_HIT_BOXES) {
+    function drawHitBox(hitBox) {
+      drawRect(
+        worldXToScreenX(hitBox.left),
+        worldHeightToScreenY(hitBox.top),
+        hitBox.right - hitBox.left,
+        hitBox.top - hitBox.bottom
+      );
+    }
+    const catHitBox = getCatHitBox();
+    drawHitBox(getCatHitBox());
+    for (let bee of state.bees) {
+      drawHitBox(getBeeHitBox(bee));
+    }
   }
 }
 
@@ -205,7 +214,7 @@ function doCatLivingCalcs() {
   }
 
   // Introduce future bees (important: in order)
-  if (Math.random() < 0.115) {
+  if (Math.random() < 0.01) {
     state.bees.push({ worldX: state.catWorldX + 150, height: 4 });
   }
 
