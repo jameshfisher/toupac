@@ -36,23 +36,34 @@ beeImageEl.src = "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2F
 let jumpRequested = false;
 let catVelocityDown = 0;
 
+let catAlive = true;
+
 let catWorldX = 0;
 let catHeight = 0;
 
 let jumpFrameNum;
 
-let bees = [{ worldX: 100, height: 12 }, { worldX: 130, height: 8 }];
+let bees = [
+  { worldX: 100, height: 12 }, 
+  { worldX: 130, height: 8 }
+];
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
 }
+
+
 
 // TODO wait for backgroundImageEl
 catSpriteImageEl.addEventListener("load", () => {
   function loop() {
     frameNum++;
 
-    catWorldX += SPRITE_SPEED_PX;
+    if (catAlive) {
+      catWorldX += SPRITE_SPEED_PX; 
+    } else {
+      resetGame();
+    }
 
     // Change velocity
     if (jumpRequested && catHeight === 0) {
@@ -62,15 +73,26 @@ catSpriteImageEl.addEventListener("load", () => {
     }
     if ((frameNum - jumpFrameNum) % 4 === 0) catVelocityDown += 1; // gravity
 
-    // Change position
+    // Change cat position
     catHeight -= catVelocityDown;
     if (catHeight <= 0) {
       catHeight = 0;
       catVelocityDown = 0;
     }
 
+    // Change bee positions
     for (let bee of bees) {
       bee.height += Math.round(Math.random() * 2 - 1);
+    }
+    
+    // Introduce future bees (important: in order)
+    if (Math.random() < 0.02) {
+      bees.push({ worldX: catWorldX+150, height: 5 });
+    }
+    
+    // Remove past bees
+    while (bees[0].beeIndex < 0) {
+      bees.shift();
     }
 
     // DRAWING
