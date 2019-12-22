@@ -92,7 +92,7 @@ resetState();
 
 function getCatHitBox() {
   return {
-    left: state.catWorldX + 10,
+    left: state.catWorldX + 20,
     right: state.catWorldX + 27,
     top: state.catHeight + 20,
     bottom: state.catHeight + 9
@@ -245,6 +245,11 @@ function drawState() {
   // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
+function furthestBeeWorldX() {
+  return state.bees.length ?
+    state.bees[state.bees.length-1].worldX :
+    0;
+}
 function doCatDeadCalcs() {
   resetState();
 }
@@ -279,15 +284,12 @@ function doCatLivingCalcs() {
   }
 
   // Introduce future bees (important: in order)
-  const nextBeeWorldX = 
-        state.bees.length ?
-        state.bees[state.bees.length-1].worldX + Math.random() * 50 :
-        state.catWorldX + 150;
-   
-  beeChance = 0.05;
-  
-  if (Math.random() < beeChance) {
-    state.bees.push({ worldX: nextBeeWorldX, height: 4 });
+  while (furthestBeeWorldX() < state.catWorldX + 150) {
+    const furthest = furthestBeeWorldX();
+    state.bees.push({ 
+      worldX: furthest + Math.round(10 + Math.random()*100), 
+      height: Math.round(Math.random()*50)
+    });
   }
   if (Math.random() < 0.02) {
     state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
