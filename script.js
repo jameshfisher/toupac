@@ -70,15 +70,6 @@ function drawText(text, sx, sy) {
   }
 }
 
-function isInBox(box, pt) {
-  return (
-    pt.x >= box.left &&
-    pt.x <= box.right &&
-    pt.y >= box.bottom &&
-    pt.y <= box.top
-  );
-}
-
 let state = {};
 
 function resetState() {
@@ -125,6 +116,15 @@ function getButterflyHitBox(b) {
   };
 }
 
+function isInBox(box, pt) {
+  return (
+    pt.x >= box.left &&
+    pt.x <= box.right &&
+    pt.y >= box.bottom &&
+    pt.y <= box.top
+  );
+}
+
 function boxesIntersect(b1, b2) {
   return (
     b1.bottom < b2.top &&
@@ -132,6 +132,10 @@ function boxesIntersect(b1, b2) {
     b1.left < b2.right &&
     b2.left < b1.right
   );
+}
+
+function boxDidBounce(b1, b2) {
+  return b2.right < b1.right && b2.bottom < b1.bottom;
 }
 
 const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
@@ -225,7 +229,7 @@ function drawState() {
   }
 
   // Draw text
-  drawText((state.frameNum+state.butterfliesEaten*100).toString(), 1, 1);
+  drawText((state.frameNum + state.butterfliesEaten * 100).toString(), 1, 1);
   // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
@@ -289,10 +293,20 @@ function doCatLivingCalcs() {
   }
 
   // Kill cat
-  let catHitBox = getCatHitBox();
-  for (let bee of state.bees) {
-    if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
-      state.catDiedAtFrameNum = state.frameNum;
+  const catHitBox = getCatHitBox();
+
+  const bouncingBees = state.bees.filter(
+    bee =>
+      boxesIntersect(catHitBox, getBeeHitBox(bee)) &&
+      boxDidBounce(catHitBox, getBeeHitBox(bee))
+  );
+  if (bouncingBees.length > 0 && state.catVelocityDown > 0) {
+    state.catVelocityDown = -3;
+  } else {
+    for (let bee of state.bees) {
+      if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
+        state.catDiedAtFrameNum = state.frameNum;
+      }
     }
   }
 
@@ -303,7 +317,7 @@ function doCatLivingCalcs() {
 
   state.butterfliesEaten +=
     state.butterflies.length - survivingButterflies.length;
-  
+
   state.butterflies = survivingButterflies;
 }
 
