@@ -92,6 +92,11 @@ function getBeeHitBox(bee) {
   };
 }
 
+function boxesIntersect(b1, b2) {
+  return b1.bottom < b2.top && b2.bottom < b1.top
+    && b1.left < b2.right && b2.left < b1.right;
+}
+
 function drawState() {
   
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
@@ -164,14 +169,9 @@ function drawState() {
     ); 
   }
   const catHitBox = getCatHitBox();
-  drawRect(
-    worldXToScreenX(catHitBox.left),
-    worldHeightToScreenY(catHitBox.top),
-    catHitBox.right - catHitBox.left,
-    catHitBox.top - catHitBox.bottom
-  );
+  drawHitBox(getCatHitBox());
   for (let bee of state.bees) {
-    draw
+    drawHitBox(getBeeHitBox(bee));
   }
 }
 
@@ -217,7 +217,7 @@ function doCatLivingCalcs() {
   // Kill cat
   let catHitBox = getCatHitBox();
   for (let bee of state.bees) {
-    if (isInBox(catHitBox, { x: bee.worldX, y: bee.height })) {
+    if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
       state.catDiedAtFrameNum = state.frameNum;
     }
   }
