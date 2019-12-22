@@ -53,7 +53,6 @@ function draw(imageEl, sx, sy, sw, sh, dx, dy) {
 }
 
 function drawRect(color, dx, dy, dw, dh) {
-  console.log("drawRect", dx, dy, dw, dh);
   ctx.fillStyle = color;
   ctx.fillRect(dx, dy, dw, dh);
 }
@@ -62,25 +61,28 @@ function drawText(text, sx, sy) {
   for (let i = 0; i < text.length; i++) {
     console.log("drawing", text[i]);
     const charCode = text.charCodeAt(i);
-    console.log(text[i], "has charcode", charCode);
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
-    console.log("Finding", text[i], "at", row, col);
     draw(asciiImageEl, col * 8, row * 8, 8, 8, 8 * i + sx, sy);
   }
 }
 
-var audioContext;
-window.addEventListener('load', init, false);
-function init() {
-  try {
-    // Fix up for prefixing
-    window.AudioContext = window.AudioContext||window.webkitAudioContext;
-    audioContext = new AudioContext();
-  }
-  catch(e) {
-    alert('Web Audio API is not supported in this browser');
-  }
+window.AudioContext = window.AudioContext||window.webkitAudioContext;
+const audioCtx = new AudioContext();
+async function loadSound(url) {
+  const response = await fetch(url);
+  const arrayBuffer = response.arrayBufer();
+  return await context.decodeAudioData(arrayBuffer);
+}
+function playSound(buffer) {
+  const source = audioCtx.createBufferSource();
+  source.buffer = buffer;
+  source.connect(audioCtx.destination);
+  source.start(0);
+}
+const jumpSound = loadSound("https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066");
+async function playJumpSound() {
+  playSound(await jumpSound);
 }
 
 let state = {};
@@ -279,6 +281,7 @@ function doCatLivingCalcs() {
     state.catVelocityDown = -5;
     state.jumpRequested = false;
     state.jumpFrameNum = state.frameNum;
+    playJumpSound();
   }
   if ((state.frameNum - state.jumpFrameNum) % 4 === 0) {
     state.catVelocityDown += 1; // gravity
