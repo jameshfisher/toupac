@@ -98,6 +98,8 @@ async function playSound(name) {
   playBuffer(await sounds[name]);
 }
 
+document.getElementById("background_music").play();
+
 let state = {};
 
 function resetState() {
