@@ -85,7 +85,8 @@ for (const [name, url] of Object.entries({
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066",
   land:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196",
-  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730"
+  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730",
+  bee: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204",
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -100,6 +101,7 @@ function resetState() {
     jumpRequested: false,
     catVelocityDown: 0,
     catDiedAtFrameNum: undefined,
+    catLives: 3,
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
@@ -364,6 +366,7 @@ function doCatLivingCalcs() {
     for (let bee of state.bees) {
       if (boxesIntersect(catHitBox, getBeeHitBox(bee))) {
         state.catDiedAtFrameNum = state.frameNum;
+        playSound("bee");
       }
     }
   }
