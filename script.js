@@ -84,7 +84,8 @@ for (const [name, url] of Object.entries({
   jump:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066",
   land:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196",
+  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -371,11 +372,10 @@ function doCatLivingCalcs() {
   const survivingButterflies = state.butterflies.filter(
     butterfly => !boxesIntersect(catHitBox, getButterflyHitBox(butterfly))
   );
-
-  state.butterfliesEaten +=
-    state.butterflies.length - survivingButterflies.length;
-
+  const numButterfliesEaten = state.butterflies.length - survivingButterflies.length;
+  state.butterfliesEaten += numButterfliesEaten;
   state.butterflies = survivingButterflies;
+  if (numButterfliesEaten > 0) { playSound("butterfly"); }
 }
 
 function doFrame() {
