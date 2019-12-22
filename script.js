@@ -66,7 +66,7 @@ function drawText(text, sx, sy) {
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
     console.log("Finding", text[i], "at", row, col);
-    draw(asciiImageEl, col*8, row*8, 8, 8, 8*i + sx, sy); 
+    draw(asciiImageEl, col * 8, row * 8, 8, 8, 8 * i + sx, sy);
   }
 }
 
@@ -91,7 +91,8 @@ function resetState() {
     catHeight: 0,
     jumpFrameNum: undefined,
     bees: [],
-    butterflies: []
+    butterflies: [],
+    butterfliesEaten: 0
   };
 }
 
@@ -181,6 +182,18 @@ function drawState() {
     );
   }
 
+  for (let butterfly of state.butterflies) {
+    draw(
+      butterflyImageEl,
+      0,
+      0,
+      16,
+      16,
+      20 + (butterfly.worldX - state.catWorldX),
+      worldHeightToScreenY(butterfly.height) - 16
+    );
+  }
+
   // Draw bees
   for (let bee of state.bees) {
     draw(
@@ -191,18 +204,6 @@ function drawState() {
       10,
       20 + (bee.worldX - state.catWorldX),
       worldHeightToScreenY(bee.height) - BEE_SPRITE_H
-    );
-  }
-  
-  for (let butterfly of state.butterflies) {
-    draw(
-      butterflyImageEl,
-      0,
-      0,
-      16,
-      16,
-      20 + (butterfly.worldX - state.catWorldX),
-      worldHeightToScreenY(butterfly.height) - 16
     );
   }
 
@@ -224,7 +225,7 @@ function drawState() {
   }
 
   // Draw text
-  drawText(state.frameNum.toString(), 1, 1);
+  drawText((state.frameNum+state.butterfliesEaten*100).toString(), 1, 1);
   // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
@@ -257,23 +258,33 @@ function doCatLivingCalcs() {
     bee.height += Math.round(Math.random() * 2 - 1);
   }
 
+  for (let butterfly of state.butterflies) {
+    butterfly.height += Math.round(Math.random() * 2 - 1);
+  }
+
   // Introduce future bees (important: in order)
   if (Math.random() < 0.01) {
     state.bees.push({ worldX: state.catWorldX + 150, height: 4 });
   }
 
   // Remove past bees
-  while (state.bees.length > 0 && state.bees[0].worldX < state.catWorldX-100) {
+  while (
+    state.bees.length > 0 &&
+    state.bees[0].worldX < state.catWorldX - 100
+  ) {
     state.bees.shift();
   }
-  
+
   // Butterflies
-  if (Math.random() < 0.01) {
+  if (Math.random() < 0.02) {
     state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
   }
-  
+
   // Remove past butterflies
-  while (state.butterflies.length > 0 && state.butterflies[0].worldX < state.catWorldX-100) {
+  while (
+    state.butterflies.length > 0 &&
+    state.butterflies[0].worldX < state.catWorldX - 100
+  ) {
     state.butterflies.shift();
   }
 
@@ -284,6 +295,16 @@ function doCatLivingCalcs() {
       state.catDiedAtFrameNum = state.frameNum;
     }
   }
+
+  // Kill butterflies
+  const survivingButterflies = state.butterflies.filter(
+    butterfly => !boxesIntersect(catHitBox, getButterflyHitBox(butterfly))
+  );
+
+  state.butterfliesEaten +=
+    state.butterflies.length - survivingButterflies.length;
+  
+  state.butterflies = survivingButterflies;
 }
 
 function doFrame() {
