@@ -20,7 +20,7 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
-const DRAW_HIT_BOXES = true;
+const DRAW_HIT_BOXES = false;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -414,7 +414,7 @@ function doFrame() {
 catSpriteImageEl.addEventListener("load", () => {
   function loop() {
     doFrame();
-    window.setTimeout(() => window.requestAnimationFrame(loop), 50);
+    window.setTimeout(() => window.requestAnimationFrame(loop), 40);
   }
   window.requestAnimationFrame(loop);
 });
