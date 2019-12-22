@@ -20,7 +20,7 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
-const DRAW_HIT_BOXES = true;
+const DRAW_HIT_BOXES = false;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -85,7 +85,6 @@ function resetState() {
     butterflies: [],
     butterfliesEaten: 0
   };
-  
 }
 
 resetState();
@@ -102,7 +101,7 @@ function getCatHitBox() {
 function getCatFeetHitBox() {
   return {
     left: state.catWorldX + 9,
-    right: state.catWorldX + 29,
+    right: state.catWorldX + 27,
     top: state.catHeight + 8,
     bottom: state.catHeight + 6
   };
@@ -119,11 +118,15 @@ function getBeeHitBox(b) {
 
 function getButterflyHitBox(b) {
   return {
-    left: b.worldX,
+    left: b.worldX + 2,
     right: b.worldX + 11,
-    top: b.height + 10,
-    bottom: b.height
+    top: b.height + 14,
+    bottom: b.height + 3
   };
+}
+
+function furthestBeeWorldX() {
+  return state.bees.length ? state.bees[state.bees.length - 1].worldX : 50;
 }
 
 function isInBox(box, pt) {
@@ -238,6 +241,9 @@ function drawState() {
     for (let bee of state.bees) {
       drawHitBox("hsla(0,100%,50%,50%)", getBeeHitBox(bee));
     }
+    for (let b of state.butterflies) {
+      drawHitBox("hsla(0,100%,50%,50%)", getButterflyHitBox(b));
+    }
   }
 
   // Draw text
@@ -245,11 +251,6 @@ function drawState() {
   // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
-function furthestBeeWorldX() {
-  return state.bees.length ?
-    state.bees[state.bees.length-1].worldX :
-    0;
-}
 function doCatDeadCalcs() {
   resetState();
 }
@@ -286,9 +287,9 @@ function doCatLivingCalcs() {
   // Introduce future bees (important: in order)
   while (furthestBeeWorldX() < state.catWorldX + 150) {
     const furthest = furthestBeeWorldX();
-    state.bees.push({ 
-      worldX: furthest + Math.round(10 + Math.random()*100), 
-      height: Math.round(Math.random()*50)
+    state.bees.push({
+      worldX: furthest + Math.round(10 + Math.random() * 100),
+      height: Math.round(Math.random() * 50)
     });
   }
   if (Math.random() < 0.02) {
@@ -317,9 +318,8 @@ function doCatLivingCalcs() {
   const catHitBox = getCatHitBox();
   const catFeetHitBox = getCatFeetHitBox();
 
-  const footBees = state.bees.filter(
-    bee =>
-      boxesIntersect(catFeetHitBox, getBeeHitBox(bee))
+  const footBees = state.bees.filter(bee =>
+    boxesIntersect(catFeetHitBox, getBeeHitBox(bee))
   );
   if (state.catVelocityDown > 0 && footBees.length > 0) {
     // Jump off the bee
