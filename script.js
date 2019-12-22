@@ -42,7 +42,7 @@ function resetState() {
     frameNum: 0,
     jumpRequested: false,
     catVelocityDown: 0,
-    catAlive: true,
+    catDiedAtFrameNum: undefined,
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
@@ -50,15 +50,15 @@ function resetState() {
   };
 }
 
-function doFrame() {
-  state.frameNum++;
+resetState();
 
-  if (state.catAlive) {
-    state.catWorldX += SPRITE_SPEED_PX; 
-  } else {
-    resetState();
-  }
+function doCatDeadFrame() {
+  resetState();
+}
 
+function doCatLivingFrame() {
+  state.catWorldX += SPRITE_SPEED_PX; 
+  
   // Change velocity
   if (state.jumpRequested && state.catHeight === 0) {
     state.catVelocityDown = -5;
@@ -74,6 +74,14 @@ function doFrame() {
   if (state.catHeight <= 0) {
     state.catHeight = 0;
     state.catVelocityDown = 0;
+  }
+  
+  // Kill cat
+  let catHeadBox = { left:  }
+  for (let bee of state.bees) {
+    if (isInBox(catHeadBox, bee)) {
+      
+    }
   }
 
   // Change bee positions
@@ -148,6 +156,16 @@ function doFrame() {
       20 + (bee.worldX - state.catWorldX),
       GROUND - bee.height
     );
+  }
+}
+
+function doFrame() {
+  state.frameNum++;
+
+  if (state.catDiedAtFrameNum) {
+    doCatDeadFrame();
+  } else {
+    doCatLivingFrame();
   }
 }
 
