@@ -69,6 +69,66 @@ function resetState() {
 
 resetState();
 
+function drawState() {
+  
+  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+  // Horizon, doesn't move
+  for (let i = 0; i < 5; i++) {
+    draw(horizonImageEl, 0, 0, 48, 48, 48 * i, 0);
+  }
+
+  // Draw ground, scrolls with cat
+  const bgScreenX = -(state.catWorldX % BG_W);
+  for (let i = 0; i < 5; i++) {
+    draw(
+      backgroundImageEl,
+      0,
+      0,
+      BG_W,
+      BG_H,
+      bgScreenX + BG_W * i,
+      GROUND - 12
+    );
+  }
+
+  // Draw cat
+  if (state.catHeight != 0) {
+    draw(
+      catSpriteImageEl,
+      SPRITE_W * 4,
+      0,
+      JUMP_SPRITE_W,
+      SPRITE_H,
+      20,
+      GROUND - state.catHeight
+    );
+  } else {
+    draw(
+      catSpriteImageEl,
+      SPRITE_W * (state.frameNum % SPRITE_NUM_FRAMES),
+      0,
+      SPRITE_W,
+      SPRITE_H,
+      24,
+      GROUND - state.catHeight
+    );
+  }
+
+  // Draw bees
+  for (let bee of state.bees) {
+    draw(
+      beeImageEl,
+      0,
+      0,
+      11,
+      10,
+      20 + (bee.worldX - state.catWorldX),
+      GROUND - bee.height
+    );
+  }
+}
+
 function doCatDeadCalcs() {
   resetState();
 }
@@ -120,9 +180,6 @@ function doCatLivingCalcs() {
       state.catDiedAtFrameNum = state.frameNum;
     }
   }
-
-  // DRAWING
-
 }
 
 function doFrame() {
@@ -133,6 +190,7 @@ function doFrame() {
   } else {
     doCatLivingCalcs();
   }
+  drawState();
 }
 
 // TODO wait for backgroundImageEl
