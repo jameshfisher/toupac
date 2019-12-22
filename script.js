@@ -95,7 +95,7 @@ function getCatHitBox() {
     left: state.catWorldX + 10,
     right: state.catWorldX + 27,
     top: state.catHeight + 20,
-    bottom: state.catHeight + 7
+    bottom: state.catHeight + 9
   };
 }
 
@@ -279,8 +279,15 @@ function doCatLivingCalcs() {
   }
 
   // Introduce future bees (important: in order)
-  if (Math.random() < 0.05) {
-    state.bees.push({ worldX: state.catWorldX + 150, height: 4 });
+  const nextBeeWorldX = 
+        state.bees.length ?
+        state.bees[state.bees.length-1].worldX + Math.random() * 50 :
+        state.catWorldX + 150;
+   
+  beeChance = 0.05;
+  
+  if (Math.random() < beeChance) {
+    state.bees.push({ worldX: nextBeeWorldX, height: 4 });
   }
   if (Math.random() < 0.02) {
     state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
