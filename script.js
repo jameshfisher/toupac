@@ -85,6 +85,7 @@ function resetState() {
     butterflies: [],
     butterfliesEaten: 0
   };
+  
 }
 
 resetState();
@@ -100,19 +101,19 @@ function getCatHitBox() {
 
 function getCatFeetHitBox() {
   return {
-    left: state.catWorldX + 7,
-    right: state.catWorldX + 25,
-    top: state.catHeight + 7,
-    bottom: state.catHeight + 4
+    left: state.catWorldX + 9,
+    right: state.catWorldX + 29,
+    top: state.catHeight + 8,
+    bottom: state.catHeight + 6
   };
 }
 
 function getBeeHitBox(b) {
   return {
     left: b.worldX,
-    right: b.worldX + 11,
-    top: b.height + 10,
-    bottom: b.height
+    right: b.worldX + 10,
+    top: b.height + 7,
+    bottom: b.height + 1
   };
 }
 
@@ -278,8 +279,11 @@ function doCatLivingCalcs() {
   }
 
   // Introduce future bees (important: in order)
-  if (Math.random() < 0.01) {
+  if (Math.random() < 0.05) {
     state.bees.push({ worldX: state.catWorldX + 150, height: 4 });
+  }
+  if (Math.random() < 0.02) {
+    state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
   }
 
   // Remove past bees
@@ -291,9 +295,6 @@ function doCatLivingCalcs() {
   }
 
   // Butterflies
-  if (Math.random() < 0.02) {
-    state.butterflies.push({ worldX: state.catWorldX + 150, height: 4 });
-  }
 
   // Remove past butterflies
   while (
@@ -305,13 +306,14 @@ function doCatLivingCalcs() {
 
   // Kill cat
   const catHitBox = getCatHitBox();
+  const catFeetHitBox = getCatFeetHitBox();
 
-  const bouncingBees = state.bees.filter(
+  const footBees = state.bees.filter(
     bee =>
-      boxesIntersect(catHitBox, getBeeHitBox(bee)) &&
-      boxDidBounce(catHitBox, getBeeHitBox(bee))
+      boxesIntersect(catFeetHitBox, getBeeHitBox(bee))
   );
-  if (state.catVelocityDown > 0 bouncingBees.length > 0 && ) {
+  if (state.catVelocityDown > 0 && footBees.length > 0) {
+    // Jump off the bee
     state.catVelocityDown = -3;
   } else {
     for (let bee of state.bees) {
