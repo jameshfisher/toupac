@@ -47,6 +47,9 @@ butterflyImageEl.src =
 const asciiImageEl = new Image();
 asciiImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441";
+const heartImageEl = new Image();
+heartImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680";
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
@@ -103,7 +106,7 @@ function resetState() {
     jumpRequested: false,
     catVelocityDown: 0,
     catDiedAtFrameNum: undefined,
-    catLives: 3,
+    catLives: 9,
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
@@ -279,7 +282,14 @@ function drawState() {
 
   // Draw text
   drawText((state.frameNum + state.butterfliesEaten * 100).toString(), 1, 1);
-  drawText(state.catLives.toString(), 1, 10);
+  
+  for (let i = 0; i < state.catLives; i++) {
+    draw(
+      heartImageEl,
+      0,0,8,8,
+      8*i, 10
+    );
+  }
 }
 
 function doCatDeadCalcs() {
@@ -306,7 +316,7 @@ function doCatLivingCalcs() {
     state.catHeight = 0;
     if (state.catVelocityDown > 1) {
       // physics is hard
-      playSound("land");
+      //playSound("land");
     }
     state.catVelocityDown = 0;
   }
@@ -324,7 +334,7 @@ function doCatLivingCalcs() {
   while (furthestBeeWorldX() < state.catWorldX + 150) {
     const furthest = furthestBeeWorldX();
     state.bees.push({
-      worldX: furthest + Math.round(10 + Math.random() * 150),
+      worldX: furthest + Math.round(Math.random() * 70),
       height: Math.round(Math.random() * 50)
     });
   }
