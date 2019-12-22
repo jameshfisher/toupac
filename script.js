@@ -117,8 +117,7 @@ function resetState() {
     catHeight: 0,
     jumpFrameNum: undefined,
     bees: [],
-    butterflies: [],
-    butterfliesEaten: 0
+    butterflies: []
   };
   restartBackgroundMusic();
 }
@@ -288,7 +287,7 @@ function drawState() {
   }
 
   // Draw text
-  drawText((state.frameNum + state.butterfliesEaten * 100).toString(), 1, 1);
+  drawText(state.frameNum.toString(), 1, 1);
   
   for (let i = 0; i < state.catLives; i++) {
     draw(
@@ -348,7 +347,7 @@ function doCatLivingCalcs() {
   while (furthestButterflyWorldX() < state.catWorldX + 150) {
     const furthest = furthestButterflyWorldX();
     state.butterflies.push({
-      worldX: furthest + Math.round(10 + Math.random() * 150),
+      worldX: furthest + Math.round(10 + Math.random() * 300),
       height: Math.round(Math.random() * 50)
     });
   }
@@ -399,7 +398,7 @@ function doCatLivingCalcs() {
   );
   const numButterfliesEaten =
     state.butterflies.length - survivingButterflies.length;
-  state.butterfliesEaten += numButterfliesEaten;
+  state.catLives += numButterfliesEaten;
   state.butterflies = survivingButterflies;
   if (numButterfliesEaten > 0) {
     playSound("butterfly");
