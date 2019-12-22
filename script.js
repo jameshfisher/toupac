@@ -98,7 +98,11 @@ async function playSound(name) {
   playBuffer(await sounds[name]);
 }
 
-document.getElementById("background_music").play();
+function restartBackgroundMusic() {
+  const el = document.getElementById("background_music");
+  el.currentTime = 0;
+  el.play();
+}
 
 let state = {};
 
@@ -116,6 +120,7 @@ function resetState() {
     butterflies: [],
     butterfliesEaten: 0
   };
+  restartBackgroundMusic();
 }
 
 resetState();
