@@ -20,7 +20,7 @@ const ZOOM = 5;
 
 const GROUND = 72;
 
-const DRAW_HIT_BOXES = true;
+const DRAW_HIT_BOXES = false;
 
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
@@ -55,7 +55,7 @@ function drawRect(dx, dy, dw, dh) {
   ctx.fillRect(dx, dy, dw, dh);
 }
 
-function drawText(text) {
+function drawText(text, sx, sy) {
   for (let i = 0; i < text.length; i++) {
     console.log("drawing", text[i]);
     const charCode = text.charCodeAt(i);
@@ -63,7 +63,7 @@ function drawText(text) {
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
     console.log("Finding", text[i], "at", row, col);
-    draw(asciiImageEl, col*8, row*8, 8, 8, 8*i, 0); 
+    draw(asciiImageEl, col*8, row*8, 8, 8, 8*i + sx, sy); 
   }
 }
 
@@ -199,7 +199,7 @@ function drawState() {
   }
 
   // Draw text
-  drawText("123");
+  drawText(state.frameNum.toString(), 1, 1);
   // draw(asciiImageEl, 0, 0, ASCII_W, ASCII_H, 0, 0);
 }
 
