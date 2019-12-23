@@ -117,7 +117,7 @@ function startNewGame() {
     jumpRequestedAtFrameNum: undefined,
     catVelocityDown: 0,
     catDiedAtFrameNum: undefined,
-    catLives: 1,
+    catLives: 9,
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
@@ -125,8 +125,7 @@ function startNewGame() {
     butterflies: []
   };
   restartBackgroundMusic();
-  const rfs = canvasEl.requestFullscreen || canvasEl.webkitRequestFullScreen || canvasEl.mozRequestFullScreen || canvasEl.msRequestFullscreen;
-  rfs();
+  document.documentElement.requestFullscreen();
 }
 
 function goToMenu() {

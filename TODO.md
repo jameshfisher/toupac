@@ -1,12 +1,10 @@
-Request fullscreen mode when starting new game
-
+Make it clearer that bees are bad - brief animation of electrocuted cat
 
 Main menu "play" button
 Main menu top score
 Main menu brief rules
+Main menu music
 
-
-Make it clearer that bees are bad - brief animation of electrocuted cat
 
 Glory sound when getting new high score
 
