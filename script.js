@@ -421,8 +421,11 @@ catSpriteImageEl.addEventListener("load", () => {
   window.requestAnimationFrame(loop);
 });
 
+const requestJump = () => {
+  state.jumpRequested = true;
+};
+
 // "click" event causes delay,
 // due to waiting for mouseup, then waiting to ensure non-double-click
-document.body.addEventListener("mousedown", () => {
-  state.jumpRequested = true;
-});
+document.body.addEventListener("mousedown", requestJump);
+document.body.addEventListener("touchstart", requestJump);

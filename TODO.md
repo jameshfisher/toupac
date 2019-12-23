@@ -1,5 +1,7 @@
 DOING: Latency when tapping to jump - due to mobile 300ms delay to detect double tap?
 
+"Jump requested" should time out after 0.5secs
+
 Background black
 
 Letterbox in viewport, position fixed
