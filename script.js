@@ -109,7 +109,7 @@ let state = {};
 function resetState() {
   state = {
     frameNum: 0,
-    jumpRequested: false,
+    jumpRequestedAtFrameNum: undefined,
     catVelocityDown: 0,
     catDiedAtFrameNum: undefined,
     catLives: 9,
@@ -288,13 +288,9 @@ function drawState() {
 
   // Draw text
   drawText(state.frameNum.toString(), 1, 1);
-  
+
   for (let i = 0; i < state.catLives; i++) {
-    draw(
-      heartImageEl,
-      0,0,8,8,
-      8*i, 10
-    );
+    draw(heartImageEl, 0, 0, 8, 8, 8 * i, 10);
   }
 }
 
@@ -306,9 +302,14 @@ function doCatLivingCalcs() {
   state.catWorldX += SPRITE_SPEED_PX;
 
   // Change velocity
-  if (state.jumpRequested && state.catHeight === 0) {
+  if (
+    state.jumpRequestedAtFrameNum &&
+    state.jumpRequestedAtFrameNum > state.frameNum - 15 &&
+    state.catHeight === 0 &&
+    state.catVelocityDown <= 0
+  ) {
     state.catVelocityDown = -5;
-    state.jumpRequested = false;
+    state.jumpRequestedAtFrameNum = false;
     state.jumpFrameNum = state.frameNum;
     playSound("jump");
   }
@@ -422,7 +423,7 @@ catSpriteImageEl.addEventListener("load", () => {
 });
 
 const requestJump = () => {
-  state.jumpRequested = true;
+  state.jumpRequestedAtFrameNum = state.frameNum;
 };
 
 // "click" event causes delay,
