@@ -8,7 +8,7 @@ const JUMP_SPRITE_W = 32;
 const BEE_SPRITE_H = 10;
 
 const BG_W = 48;
-const BG_H = 48;
+const BG_H = 96;
 
 const ASCII_W = 512;
 const ASCII_H = 256;
@@ -33,7 +33,10 @@ catSpriteImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577130104644";
 const backgroundImageEl = new Image();
 backgroundImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577133731601";
+const foregroundImageEl = new Image();
+foregroundImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577133761132";
 const horizonImageEl = new Image();
 horizonImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
@@ -237,6 +240,15 @@ function drawState() {
       bgScreenX + BG_W * i,
       worldHeightToScreenY(0) - 32
     );
+    draw(
+      foregroundImageEl,
+      0,
+      0,
+      BG_W,
+      BG_H,
+      bgScreenX + BG_W * i,
+      worldHeightToScreenY(0) - 32
+    );
   }
 
   // Draw cat
@@ -355,7 +367,7 @@ function doCalcs() {
       state.catHeight === 0 &&
       state.catVelocityDown <= 0
     ) {
-      state.catVelocityDown = -4;
+      state.catVelocityDown = -5;
       state.jumpRequestedAtFrameNum = false;
       state.jumpFrameNum = state.frameNum;
       playSound("jump");
