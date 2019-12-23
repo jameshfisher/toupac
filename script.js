@@ -25,10 +25,6 @@ const DRAW_HIT_BOXES = false;
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
-// canvasEl.style.width = CANVAS_W * ZOOM + "px";
-
-// const rfs = canvasEl.requestFullscreen || canvasEl.webkitRequestFullScreen || canvasEl.mozRequestFullScreen || canvasEl.msRequestFullscreen;
-// rfs();
 
 const ctx = canvasEl.getContext("2d");
 
@@ -109,7 +105,7 @@ function restartBackgroundMusic() {
 }
 
 function stopBackgroundMusic() {
-  backgroundMusicEl.pause();  
+  backgroundMusicEl.pause();
 }
 
 let state = {};
@@ -129,6 +125,8 @@ function startNewGame() {
     butterflies: []
   };
   restartBackgroundMusic();
+  const rfs = canvasEl.requestFullscreen || canvasEl.webkitRequestFullScreen || canvasEl.mozRequestFullScreen || canvasEl.msRequestFullscreen;
+  rfs();
 }
 
 function goToMenu() {
@@ -138,7 +136,7 @@ function goToMenu() {
   stopBackgroundMusic();
 }
 
-startNewGame();
+goToMenu();
 
 function getCatHitBox() {
   return {
@@ -217,7 +215,7 @@ function drawState() {
     drawText("LES AVENTURES DE TOUPAC", 1, 1);
     return;
   }
-  
+
   ctx.fillStyle = "red";
   ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
@@ -318,118 +316,125 @@ function drawState() {
   }
 }
 
-function doPlayingCalcs() {
-  state.frameNum++;
-  
-  state.catWorldX += SPRITE_SPEED_PX;
+function doCalcs() {
+  if (state.mode === "menu") {
+    return;
+  } else if (state.mode === "playing") {
+    if (state.catDiedAtFrameNum) {
+      goToMenu();
+      return;
+    }
 
-  // Change velocity
-  if (
-    state.jumpRequestedAtFrameNum &&
-    state.jumpRequestedAtFrameNum > state.frameNum - 15 &&
-    state.catHeight === 0 &&
-    state.catVelocityDown <= 0
-  ) {
-    state.catVelocityDown = -5;
-    state.jumpRequestedAtFrameNum = false;
-    state.jumpFrameNum = state.frameNum;
-    playSound("jump");
-  }
-  if ((state.frameNum - state.jumpFrameNum) % 4 === 0) {
-    state.catVelocityDown += 1; // gravity
-  }
+    state.frameNum++;
 
-  // Change cat position
-  state.catHeight -= state.catVelocityDown;
-  if (state.catHeight <= 0) {
-    state.catHeight = 0;
-    state.catVelocityDown = 0;
-  }
+    state.catWorldX += SPRITE_SPEED_PX;
 
-  // Change bee positions
-  for (let bee of state.bees) {
-    bee.height += Math.round(Math.random() * 2 - 1);
-  }
+    // Change velocity
+    if (
+      state.jumpRequestedAtFrameNum &&
+      state.jumpRequestedAtFrameNum > state.frameNum - 15 &&
+      state.catHeight === 0 &&
+      state.catVelocityDown <= 0
+    ) {
+      state.catVelocityDown = -5;
+      state.jumpRequestedAtFrameNum = false;
+      state.jumpFrameNum = state.frameNum;
+      playSound("jump");
+    }
+    if ((state.frameNum - state.jumpFrameNum) % 4 === 0) {
+      state.catVelocityDown += 1; // gravity
+    }
 
-  for (let butterfly of state.butterflies) {
-    butterfly.height += Math.round(Math.random() * 2 - 1);
-  }
+    // Change cat position
+    state.catHeight -= state.catVelocityDown;
+    if (state.catHeight <= 0) {
+      state.catHeight = 0;
+      state.catVelocityDown = 0;
+    }
 
-  // Introduce future bees (important: in order)
-  while (furthestBeeWorldX() < state.catWorldX + 150) {
-    const furthest = furthestBeeWorldX();
-    state.bees.push({
-      worldX: furthest + Math.round(Math.random() * 70),
-      height: Math.round(Math.random() * 50)
-    });
-  }
-  while (furthestButterflyWorldX() < state.catWorldX + 150) {
-    const furthest = furthestButterflyWorldX();
-    state.butterflies.push({
-      worldX: furthest + Math.round(10 + Math.random() * 300),
-      height: Math.round(Math.random() * 50)
-    });
-  }
+    // Change bee positions
+    for (let bee of state.bees) {
+      bee.height += Math.round(Math.random() * 2 - 1);
+    }
 
-  // Remove past bees
-  while (
-    state.bees.length > 0 &&
-    state.bees[0].worldX < state.catWorldX - 100
-  ) {
-    state.bees.shift();
-  }
+    for (let butterfly of state.butterflies) {
+      butterfly.height += Math.round(Math.random() * 2 - 1);
+    }
 
-  // Butterflies
+    // Introduce future bees (important: in order)
+    while (furthestBeeWorldX() < state.catWorldX + 150) {
+      const furthest = furthestBeeWorldX();
+      state.bees.push({
+        worldX: furthest + Math.round(Math.random() * 70),
+        height: Math.round(Math.random() * 50)
+      });
+    }
+    while (furthestButterflyWorldX() < state.catWorldX + 150) {
+      const furthest = furthestButterflyWorldX();
+      state.butterflies.push({
+        worldX: furthest + Math.round(10 + Math.random() * 300),
+        height: Math.round(Math.random() * 50)
+      });
+    }
 
-  // Remove past butterflies
-  while (
-    state.butterflies.length > 0 &&
-    state.butterflies[0].worldX < state.catWorldX - 100
-  ) {
-    state.butterflies.shift();
-  }
+    // Remove past bees
+    while (
+      state.bees.length > 0 &&
+      state.bees[0].worldX < state.catWorldX - 100
+    ) {
+      state.bees.shift();
+    }
 
-  // Kill cat
-  const catHitBox = getCatHitBox();
-  const catFeetHitBox = getCatFeetHitBox();
+    // Butterflies
 
-  const footBees = state.bees.filter(bee =>
-    boxesIntersect(catFeetHitBox, getBeeHitBox(bee))
-  );
-  if (state.catVelocityDown > 0 && footBees.length > 0) {
-    // Jump off the bee
-    state.catVelocityDown = -3;
-    playSound("jump");
-  } else {
-    const survivingBees = state.bees.filter(
-      bee => !boxesIntersect(catHitBox, getBeeHitBox(bee))
+    // Remove past butterflies
+    while (
+      state.butterflies.length > 0 &&
+      state.butterflies[0].worldX < state.catWorldX - 100
+    ) {
+      state.butterflies.shift();
+    }
+
+    // Kill cat
+    const catHitBox = getCatHitBox();
+    const catFeetHitBox = getCatFeetHitBox();
+
+    const footBees = state.bees.filter(bee =>
+      boxesIntersect(catFeetHitBox, getBeeHitBox(bee))
     );
-    const numBeesEaten = state.bees.length - survivingBees.length;
-    state.bees = survivingBees;
-    state.catLives -= numBeesEaten;
-    if (state.catLives <= 0) state.catDiedAtFrameNum = state.frameNum;
-    if (numBeesEaten > 0) playSound("bee");
-  }
+    if (state.catVelocityDown > 0 && footBees.length > 0) {
+      // Jump off the bee
+      state.catVelocityDown = -3;
+      playSound("jump");
+    } else {
+      const survivingBees = state.bees.filter(
+        bee => !boxesIntersect(catHitBox, getBeeHitBox(bee))
+      );
+      const numBeesEaten = state.bees.length - survivingBees.length;
+      state.bees = survivingBees;
+      state.catLives -= numBeesEaten;
+      if (state.catLives <= 0) state.catDiedAtFrameNum = state.frameNum;
+      if (numBeesEaten > 0) playSound("bee");
+    }
 
-  // Kill butterflies
-  const survivingButterflies = state.butterflies.filter(
-    butterfly => !boxesIntersect(catHitBox, getButterflyHitBox(butterfly))
-  );
-  const numButterfliesEaten =
-    state.butterflies.length - survivingButterflies.length;
-  state.catLives += numButterfliesEaten;
-  state.butterflies = survivingButterflies;
-  if (numButterfliesEaten > 0) {
-    playSound("butterfly");
+    // Kill butterflies
+    const survivingButterflies = state.butterflies.filter(
+      butterfly => !boxesIntersect(catHitBox, getButterflyHitBox(butterfly))
+    );
+    const numButterfliesEaten =
+      state.butterflies.length - survivingButterflies.length;
+    state.catLives += numButterfliesEaten;
+    state.butterflies = survivingButterflies;
+    if (numButterfliesEaten > 0) {
+      playSound("butterfly");
+    }
+  } else {
+    console.error("Unknown mode", state.mode);
   }
 }
 
 function doFrame() {
-  if (state.mode === "playing" && state.catDiedAtFrameNum) {
-    goToMenu();
-  } else {
-    doPlayingCalcs();
-  }
+  doCalcs();
   drawState();
 }
 
@@ -444,7 +449,7 @@ catSpriteImageEl.addEventListener("load", () => {
 
 const onClick = () => {
   if (state.mode === "playing") {
-    state.jumpRequestedAtFrameNum = state.frameNum;  
+    state.jumpRequestedAtFrameNum = state.frameNum;
   } else if (state.mode === "menu") {
     startNewGame();
   }

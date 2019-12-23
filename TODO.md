@@ -1,9 +1,9 @@
-Main menu screen with
-  "play" button
-  top score
-  Brief rules on menu screen
+Request fullscreen mode when starting new game
 
-Request fullscreen mode when starting
+
+Main menu "play" button
+Main menu top score
+Main menu brief rules
 
 
 Make it clearer that bees are bad - brief animation of electrocuted cat
@@ -16,3 +16,5 @@ foreground - fast-scrolling leaves and stuff
 
 make it a web app
   with a toupac head icon
+
+sound when die
