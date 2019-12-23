@@ -266,7 +266,7 @@ function drawState() {
       worldXToScreenX(state.catWorldX),
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
-  } else if (state.jumpFrameNum && state.jumpFrameNum-state.frameNum < 2) {
+  } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 2) {
    // Draw cat standing on bee briefly
     draw(
       catSpriteImageEl,
@@ -469,6 +469,7 @@ function doCalcs() {
     if (state.catVelocityDown > 0 && footBees.length > 0) {
       // Jump off the bee
       state.catVelocityDown = jumpRequested() ? -4 : -2;
+      state.jumpFrameNum = state.frameNum;
       playSound("jump");
     } else {
       const survivingBees = state.bees.filter(
