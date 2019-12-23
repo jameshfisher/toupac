@@ -27,6 +27,9 @@ canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
 // canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
+// const rfs = canvasEl.requestFullscreen || canvasEl.webkitRequestFullScreen || canvasEl.mozRequestFullScreen || canvasEl.msRequestFullscreen;
+// rfs();
+
 const ctx = canvasEl.getContext("2d");
 
 const catSpriteImageEl = new Image();
@@ -106,8 +109,9 @@ function restartBackgroundMusic() {
 
 let state = {};
 
-function resetState() {
+function startNewGame() {
   state = {
+    mode: "playing",
     frameNum: 0,
     jumpRequestedAtFrameNum: undefined,
     catVelocityDown: 0,
@@ -122,7 +126,12 @@ function resetState() {
   restartBackgroundMusic();
 }
 
-resetState();
+function goToMenu() {
+  startNewGame();
+}
+
+
+startNewGame();
 
 function getCatHitBox() {
   return {
@@ -294,11 +303,7 @@ function drawState() {
   }
 }
 
-function doCatDeadCalcs() {
-  resetState();
-}
-
-function doCatLivingCalcs() {
+function doPlayingCalcs() {
   state.catWorldX += SPRITE_SPEED_PX;
 
   // Change velocity
@@ -406,9 +411,9 @@ function doFrame() {
   state.frameNum++;
 
   if (state.catDiedAtFrameNum) {
-    doCatDeadCalcs();
+    goToMenu();
   } else {
-    doCatLivingCalcs();
+    doPlayingCalcs();
   }
   drawState();
 }
