@@ -90,7 +90,9 @@ for (const [name, url] of Object.entries({
   butterfly:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730",
   bee:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204",
+  electric:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_exp_medium10.wav?v=1577131384116"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -430,6 +432,7 @@ function doCalcs() {
       if (state.catLives <= 0) state.catDiedAtFrameNum = state.frameNum;
       if (numBeesEaten > 0) {
         playSound("bee");
+        playSound("electric");
         state.ateBeeAtFrameNum = state.frameNum;
       }
     }
