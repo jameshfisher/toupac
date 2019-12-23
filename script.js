@@ -413,7 +413,10 @@ function doCalcs() {
       state.bees = survivingBees;
       state.catLives -= numBeesEaten;
       if (state.catLives <= 0) state.catDiedAtFrameNum = state.frameNum;
-      if (numBeesEaten > 0) playSound("bee");
+      if (numBeesEaten > 0) {
+        playSound("bee");
+        state.ateBeeAtFrameNum = state.frameNum;
+      }
     }
 
     // Kill butterflies
