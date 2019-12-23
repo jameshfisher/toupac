@@ -266,6 +266,17 @@ function drawState() {
       worldXToScreenX(state.catWorldX),
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
+  } else if (state.jumpFrameNum && state.jumpFrameNum-state.frameNum < 2) {
+   // Draw cat standing on bee briefly
+    draw(
+      catSpriteImageEl,
+      0,
+      0,
+      SPRITE_W,
+      SPRITE_H,
+      worldXToScreenX(state.catWorldX) + 4,
+      worldHeightToScreenY(state.catHeight) - SPRITE_H
+    );
   } else if (state.catHeight != 0) {
     draw(
       catSpriteImageEl,

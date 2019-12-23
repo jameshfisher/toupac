@@ -1,9 +1,9 @@
-make it a web app
-  with a toupac head icon
 
 When jumping on a bee, brief animation of standing on the bee
 
-Glory sound when getting new high score
+move hearts to the top right
+
+animated bees and butterflies
 
 
 Main menu "play" button
@@ -11,8 +11,7 @@ Main menu top score
 Main menu brief rules
 Main menu music
 
-sound when die
+Glory sound when getting new high score
 
-animated bees and butterflies
-
-move hearts to the top right
+make it a web app
+  with a toupac head icon
