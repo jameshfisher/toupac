@@ -22,6 +22,8 @@ const GROUND = 72;
 
 const DRAW_HIT_BOXES = false;
 
+const CAT_JUMP_VELOCITY = -5;
+
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
@@ -332,6 +334,10 @@ function drawState() {
   }
 }
 
+const jumpRequested = () =>
+  state.jumpRequestedAtFrameNum &&
+  state.jumpRequestedAtFrameNum > state.frameNum - 15;
+
 function doCalcs() {
   if (state.mode === "menu") {
     return;
@@ -347,12 +353,11 @@ function doCalcs() {
 
     // Change velocity
     if (
-      state.jumpRequestedAtFrameNum &&
-      state.jumpRequestedAtFrameNum > state.frameNum - 15 &&
+      jumpRequested() &&
       state.catHeight === 0 &&
       state.catVelocityDown <= 0
     ) {
-      state.catVelocityDown = -5;
+      state.catVelocityDown = CAT_JUMP_VELOCITY;
       state.jumpRequestedAtFrameNum = false;
       state.jumpFrameNum = state.frameNum;
       playSound("jump");
@@ -420,7 +425,7 @@ function doCalcs() {
     );
     if (state.catVelocityDown > 0 && footBees.length > 0) {
       // Jump off the bee
-      state.catVelocityDown = -3;
+      state.catVelocityDown = jumpRequested() ? -4 : -2;
       playSound("jump");
     } else {
       const survivingBees = state.bees.filter(
