@@ -1,4 +1,4 @@
-Make it clearer that bees are bad - brief animation of electrocuted cat
+Worse sound when eating a bee - harsh electrical crackle noise?
 
 Main menu "play" button
 Main menu top score

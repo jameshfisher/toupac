@@ -30,7 +30,7 @@ const ctx = canvasEl.getContext("2d");
 
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577014873971";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577130104644";
 const backgroundImageEl = new Image();
 backgroundImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577014872624";
@@ -238,7 +238,22 @@ function drawState() {
   }
 
   // Draw cat
-  if (state.catHeight != 0) {
+  if (
+    state.ateBeeAtFrameNum === state.frameNum - 1 ||
+    state.ateBeeAtFrameNum === state.frameNum - 3 ||
+    state.ateBeeAtFrameNum === state.frameNum - 5
+  ) {
+    // Draw electrocuted cat
+    draw(
+      catSpriteImageEl,
+      130,
+      0,
+      32,
+      SPRITE_H,
+      worldXToScreenX(state.catWorldX),
+      worldHeightToScreenY(state.catHeight) - SPRITE_H
+    );
+  } else if (state.catHeight != 0) {
     draw(
       catSpriteImageEl,
       SPRITE_W * 4,
