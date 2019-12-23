@@ -1,5 +1,3 @@
-Letterbox in viewport, position fixed
-
 Request fullscreen mode when starting
 
 Main menu screen with
@@ -12,3 +10,5 @@ Make it clearer that bees are bad - brief animation of electrocuted cat
 Glory sound when getting new high score
 
 you can live forever - game should get forever harder as it progresses
+
+foreground - fast-scrolling leaves and stuff

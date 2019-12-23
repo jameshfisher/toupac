@@ -25,7 +25,7 @@ const DRAW_HIT_BOXES = false;
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
-canvasEl.style.width = CANVAS_W * ZOOM + "px";
+// canvasEl.style.width = CANVAS_W * ZOOM + "px";
 
 const ctx = canvasEl.getContext("2d");
 

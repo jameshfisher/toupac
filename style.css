@@ -1,5 +1,11 @@
 body {
   margin: 0;
   background-color: black;
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+}
+
+canvas {
+  image-rendering: pixelated; 
+  width: 100%;
 }
