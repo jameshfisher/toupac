@@ -101,10 +101,15 @@ async function playSound(name) {
   playBuffer(await sounds[name]);
 }
 
+const backgroundMusicEl = document.getElementById("background_music");
+
 function restartBackgroundMusic() {
-  const el = document.getElementById("background_music");
-  el.currentTime = 0;
-  el.play();
+  backgroundMusicEl.currentTime = 0;
+  backgroundMusicEl.play();
+}
+
+function stopBackgroundMusic() {
+  backgroundMusicEl.pause();  
 }
 
 let state = {};
@@ -116,7 +121,7 @@ function startNewGame() {
     jumpRequestedAtFrameNum: undefined,
     catVelocityDown: 0,
     catDiedAtFrameNum: undefined,
-    catLives: 9,
+    catLives: 1,
     catWorldX: 0,
     catHeight: 0,
     jumpFrameNum: undefined,
@@ -127,9 +132,11 @@ function startNewGame() {
 }
 
 function goToMenu() {
-  startNewGame();
+  state = {
+    mode: "menu"
+  };
+  stopBackgroundMusic();
 }
-
 
 startNewGame();
 
@@ -204,7 +211,15 @@ const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
 const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
 function drawState() {
-  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  if (state.mode === "menu") {
+    ctx.fillStyle = "red";
+    ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    drawText("LES AVENTURES DE TOUPAC", 1, 1);
+    return;
+  }
+  
+  ctx.fillStyle = "red";
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
 
   // Horizon, doesn't move
   for (let i = 0; i < 5; i++) {
@@ -304,6 +319,8 @@ function drawState() {
 }
 
 function doPlayingCalcs() {
+  state.frameNum++;
+  
   state.catWorldX += SPRITE_SPEED_PX;
 
   // Change velocity
@@ -408,9 +425,7 @@ function doPlayingCalcs() {
 }
 
 function doFrame() {
-  state.frameNum++;
-
-  if (state.catDiedAtFrameNum) {
+  if (state.mode === "playing" && state.catDiedAtFrameNum) {
     goToMenu();
   } else {
     doPlayingCalcs();
@@ -427,11 +442,15 @@ catSpriteImageEl.addEventListener("load", () => {
   window.requestAnimationFrame(loop);
 });
 
-const requestJump = () => {
-  state.jumpRequestedAtFrameNum = state.frameNum;
+const onClick = () => {
+  if (state.mode === "playing") {
+    state.jumpRequestedAtFrameNum = state.frameNum;  
+  } else if (state.mode === "menu") {
+    startNewGame();
+  }
 };
 
 // "click" event causes delay,
 // due to waiting for mouseup, then waiting to ensure non-double-click
-document.body.addEventListener("mousedown", requestJump);
-document.body.addEventListener("touchstart", requestJump);
+document.body.addEventListener("mousedown", onClick);
+document.body.addEventListener("touchstart", onClick);
