@@ -320,10 +320,6 @@ function doCatLivingCalcs() {
   state.catHeight -= state.catVelocityDown;
   if (state.catHeight <= 0) {
     state.catHeight = 0;
-    if (state.catVelocityDown > 1) {
-      // physics is hard
-      //playSound("land");
-    }
     state.catVelocityDown = 0;
   }
 
@@ -425,6 +421,8 @@ catSpriteImageEl.addEventListener("load", () => {
   window.requestAnimationFrame(loop);
 });
 
-document.body.addEventListener("click", () => {
+// "click" event causes delay,
+// due to waiting for mouseup, then waiting to ensure non-double-click
+document.body.addEventListener("mousedown", () => {
   state.jumpRequested = true;
 });
