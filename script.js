@@ -18,7 +18,7 @@ const CANVAS_H = 108;
 
 const ZOOM = 5;
 
-const GROUND = 72;
+const GROUND = 84;
 
 const DRAW_HIT_BOXES = false;
 
@@ -240,15 +240,6 @@ function drawState() {
       bgScreenX + BG_W * i,
       worldHeightToScreenY(0) - 32
     );
-    draw(
-      foregroundImageEl,
-      0,
-      0,
-      BG_W,
-      BG_H,
-      bgScreenX + BG_W * i,
-      worldHeightToScreenY(0) - 32
-    );
   }
 
   // Draw cat
@@ -311,6 +302,20 @@ function drawState() {
       10,
       20 + (bee.worldX - state.catWorldX),
       worldHeightToScreenY(bee.height) - BEE_SPRITE_H
+    );
+  }
+  
+  // Draw foreground
+  const fgScreenX = -((state.catWorldX*2) % BG_W);
+  for (let i = 0; i < 5; i++) {
+    draw(
+      foregroundImageEl,
+      0,
+      0,
+      BG_W,
+      BG_H,
+      fgScreenX + BG_W * i,
+      worldHeightToScreenY(0) - 35
     );
   }
 
