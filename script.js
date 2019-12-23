@@ -33,10 +33,10 @@ catSpriteImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577130104644";
 const backgroundImageEl = new Image();
 backgroundImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577135098133";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768";
 const foregroundImageEl = new Image();
 foregroundImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577135076746";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044";
 const horizonImageEl = new Image();
 horizonImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
@@ -323,7 +323,7 @@ function drawState() {
       BG_W,
       BG_H,
       fgScreenX + BG_W * i,
-      worldHeightToScreenY(0) - 35
+      worldHeightToScreenY(0) - 32
     );
   }
 

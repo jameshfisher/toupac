@@ -1,8 +1,3 @@
-DOING you can live forever - game should get forever harder as it progresses
-
-
-mid-distance - some trees
-
 make it a web app
   with a toupac head icon
 
