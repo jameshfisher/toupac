@@ -399,14 +399,14 @@ function doCalcs() {
 
     // Introduce future bees (important: in order)
     const startBeeGap = 35;
-    const hardestBeeGap = 15;
-    const avgBeeGap = 35;
+    const hardestBeeGap = 10;
+    const avgBeeGap = Math.max(hardestBeeGap, startBeeGap - Math.round(state.catWorldX/400));
     
     while (furthestBeeWorldX() < state.catWorldX + 150) {
       const furthest = furthestBeeWorldX();
       state.bees.push({
         worldX: furthest + Math.round(Math.random() * avgBeeGap * 2),
-        height: Math.round(Math.random() * 50)
+        height: Math.round(Math.random() * 70)
       });
     }
     
