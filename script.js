@@ -40,6 +40,9 @@ foregroundImageEl.src =
 const horizonImageEl = new Image();
 horizonImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
+const treesImageEl = new Image();
+treesImageEl.src =
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577138245470";
 const beeImageEl = new Image();
 beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
@@ -228,6 +231,11 @@ function drawState() {
     draw(horizonImageEl, 0, 0, 48, 96, 48 * i, 0);
   }
 
+  const treesScreenX = -(Math.round(state.catWorldX/2) % BG_W);
+  for (let i = 0; i < 5; i++) {
+    draw(treesImageEl, 0, 0, 48, 96, treesScreenX + BG_W * i, -8);
+  }
+  
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
   for (let i = 0; i < 5; i++) {
