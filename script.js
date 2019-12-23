@@ -42,7 +42,7 @@ horizonImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
 const treesImageEl = new Image();
 treesImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577138245470";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355";
 const beeImageEl = new Image();
 beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
@@ -231,11 +231,11 @@ function drawState() {
     draw(horizonImageEl, 0, 0, 48, 96, 48 * i, 0);
   }
 
-  const treesScreenX = -(Math.round(state.catWorldX/2) % BG_W);
+  const treesScreenX = -(Math.round(state.catWorldX / 2) % BG_W);
   for (let i = 0; i < 5; i++) {
-    draw(treesImageEl, 0, 0, 48, 96, treesScreenX + BG_W * i, -8);
+    draw(treesImageEl, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
   }
-  
+
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
   for (let i = 0; i < 5; i++) {
@@ -406,18 +406,21 @@ function doCalcs() {
     }
 
     // Introduce future bees (important: in order)
-    const startBeeGap = 35;
-    const hardestBeeGap = 10;
-    const avgBeeGap = Math.max(hardestBeeGap, startBeeGap - Math.round(state.catWorldX/400));
-    
+    const startBeeGap = 50;
+    const hardestBeeGap = 20;
+    const avgBeeGap = Math.max(
+      hardestBeeGap,
+      startBeeGap - Math.round(state.catWorldX / 400)
+    );
+
     while (furthestBeeWorldX() < state.catWorldX + 150) {
       const furthest = furthestBeeWorldX();
       state.bees.push({
         worldX: furthest + Math.round(Math.random() * avgBeeGap * 2),
-        height: Math.round(Math.random() * 70)
+        height: Math.round(Math.random() * 50)
       });
     }
-    
+
     // Introduce future butterflies
     while (furthestButterflyWorldX() < state.catWorldX + 150) {
       const furthest = furthestButterflyWorldX();
