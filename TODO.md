@@ -1,8 +1,4 @@
-
-foreground - fast-scrolling leaves and stuff
-
-
-you can live forever - game should get forever harder as it progresses
+DOING you can live forever - game should get forever harder as it progresses
 
 
 mid-distance - some trees
@@ -23,3 +19,5 @@ Main menu music
 sound when die
 
 animated bees and butterflies
+
+move hearts to the top right

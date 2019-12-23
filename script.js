@@ -304,9 +304,9 @@ function drawState() {
       worldHeightToScreenY(bee.height) - BEE_SPRITE_H
     );
   }
-  
+
   // Draw foreground
-  const fgScreenX = -((state.catWorldX*2) % BG_W);
+  const fgScreenX = -((state.catWorldX * 2) % BG_W);
   for (let i = 0; i < 5; i++) {
     draw(
       foregroundImageEl,
@@ -398,13 +398,19 @@ function doCalcs() {
     }
 
     // Introduce future bees (important: in order)
+    const startBeeGap = 35;
+    const hardestBeeGap = 15;
+    const avgBeeGap = 35;
+    
     while (furthestBeeWorldX() < state.catWorldX + 150) {
       const furthest = furthestBeeWorldX();
       state.bees.push({
-        worldX: furthest + Math.round(Math.random() * 70),
+        worldX: furthest + Math.round(Math.random() * avgBeeGap * 2),
         height: Math.round(Math.random() * 50)
       });
     }
+    
+    // Introduce future butterflies
     while (furthestButterflyWorldX() < state.catWorldX + 150) {
       const furthest = furthestButterflyWorldX();
       state.butterflies.push({
