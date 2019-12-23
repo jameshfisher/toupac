@@ -22,8 +22,6 @@ const GROUND = 72;
 
 const DRAW_HIT_BOXES = false;
 
-const CAT_JUMP_VELOCITY = -5;
-
 const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
@@ -357,7 +355,7 @@ function doCalcs() {
       state.catHeight === 0 &&
       state.catVelocityDown <= 0
     ) {
-      state.catVelocityDown = CAT_JUMP_VELOCITY;
+      state.catVelocityDown = -4;
       state.jumpRequestedAtFrameNum = false;
       state.jumpFrameNum = state.frameNum;
       playSound("jump");
