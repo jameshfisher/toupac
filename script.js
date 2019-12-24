@@ -71,7 +71,9 @@ for (let [name, url] of Object.entries({
   ascii:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441",
   heart:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680",
+  border:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fborder.png?v=1577202914499"
 })) {
   const img = new Image();
   img.src = url;
@@ -137,8 +139,6 @@ function restartBackgroundMusic() {
 function stopBackgroundMusic() {
   backgroundMusicEl.pause();
 }
-
-let hasClicked = false;
 
 let state = {};
 
@@ -243,7 +243,7 @@ function drawState() {
   if (state.mode === "menu") {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-    
+
     for (let i = 0; i < 5; i++) {
       draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
     }
@@ -264,12 +264,10 @@ function drawState() {
       );
     }
     
-    if (!hasClicked) {
-      drawText("CLICK TO START", 1, 1);
-    } else {
-      drawText("LES AVENTURES DE TOUPAC", 1, 1);
-    }
-    return;
+    draw(imageEls.border, 0, 0, CANVAS_W, CANVAS_H, 0, 0);
+
+    drawText("CLICK TO START", 40, 60);
+    
   } else if (state.mode === "playing") {
     // Horizon, doesn't move
     for (let i = 0; i < 5; i++) {
@@ -579,8 +577,6 @@ imageEls.catSprite.addEventListener("load", () => {
 const onTap = () => {
   if (state.mode === "playing") {
     state.jumpRequestedAtFrameNum = state.frameNum;
-  } else if (state.mode === "menu" && hasClicked) {
-    startNewGame();
   }
 };
 
@@ -589,5 +585,7 @@ const onTap = () => {
 document.body.addEventListener("mousedown", onTap);
 document.body.addEventListener("touchstart", onTap);
 document.body.addEventListener("click", () => {
-  hasClicked = true;
+  if (state.mode === "menu") {
+    startNewGame();
+  }
 });
