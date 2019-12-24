@@ -502,8 +502,8 @@ function doCalcs() {
     }
 
     // Introduce future bees (important: in order)
-    const startBeeGap = 50;
-    const hardestBeeGap = 30;
+    const startBeeGap = 60;
+    const hardestBeeGap = 40;
     const avgBeeGap = Math.max(
       hardestBeeGap,
       startBeeGap - Math.round(state.catWorldX / 400)
@@ -597,7 +597,7 @@ imageEls.catSprite.addEventListener("load", () => {
     doFrame();
     let loopSpeed = 40;
     if (state.mode === "playing") {
-      loopSpeed = Math.max(10, 40 - Math.floor(state.frameNum / 300));
+      loopSpeed = Math.max(20, 40 - Math.floor(state.frameNum / 300));
     }
     window.setTimeout(() => window.requestAnimationFrame(loop), loopSpeed);
   }
