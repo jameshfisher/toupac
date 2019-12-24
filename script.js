@@ -130,7 +130,9 @@ for (const [name, url] of Object.entries({
   electric:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_exp_medium10.wav?v=1577131384116",
   lose:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sound_shutdown2.wav?v=1577205803077"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sound_shutdown2.wav?v=1577205803077",
+  win:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsawsquarenoise_-_07_-_Towel_Defence_Jingle_Win.mp3?v=1577206256642"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -454,8 +456,9 @@ function doCalcs() {
     if (state.catDiedAtFrameNum) {
       const score = state.frameNum;
       const highScore = getHighScore();
-      if (highScore !== null && highScore < score) {
+      if (highScore === null || highScore < score) {
         localStorage.setItem("high_score", score);
+        playSound("win");
       } else {
         playSound("lose");
       }
@@ -612,7 +615,7 @@ const onTap = () => {
 document.body.addEventListener("mousedown", onTap);
 document.body.addEventListener("touchstart", onTap);
 document.body.addEventListener("click", () => {
-  if (state.mode === "menu") {
+  if (state.mode === "menu" && state.catWorldX > 30) {
     startNewGame();
   }
 });
