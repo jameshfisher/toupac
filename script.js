@@ -243,167 +243,185 @@ function drawState() {
   if (state.mode === "menu") {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    
+    for (let i = 0; i < 5; i++) {
+      draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
+    }
+    const treesScreenX = 0;
+    for (let i = 0; i < 5; i++) {
+      draw(imageEls.trees, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
+    }
+    const bgScreenX = 0;
+    for (let i = 0; i < 5; i++) {
+      draw(
+        imageEls.background,
+        0,
+        0,
+        BG_W,
+        BG_H,
+        bgScreenX + BG_W * i,
+        worldHeightToScreenY(0) - 32
+      );
+    }
+    
     if (!hasClicked) {
-      drawText("PLEASE CLICK...", 1, 1);
+      drawText("CLICK TO START", 1, 1);
     } else {
       drawText("LES AVENTURES DE TOUPAC", 1, 1);
     }
     return;
-  }
+  } else if (state.mode === "playing") {
+    // Horizon, doesn't move
+    for (let i = 0; i < 5; i++) {
+      draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
+    }
 
-  ctx.fillStyle = "red";
-  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+    const treesScreenX = -(Math.round(state.catWorldX / 2) % BG_W);
+    for (let i = 0; i < 5; i++) {
+      draw(imageEls.trees, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
+    }
 
-  // Horizon, doesn't move
-  for (let i = 0; i < 5; i++) {
-    draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
-  }
-
-  const treesScreenX = -(Math.round(state.catWorldX / 2) % BG_W);
-  for (let i = 0; i < 5; i++) {
-    draw(imageEls.trees, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
-  }
-
-  // Draw ground, scrolls with cat
-  const bgScreenX = -(state.catWorldX % BG_W);
-  for (let i = 0; i < 5; i++) {
-    draw(
-      imageEls.background,
-      0,
-      0,
-      BG_W,
-      BG_H,
-      bgScreenX + BG_W * i,
-      worldHeightToScreenY(0) - 32
-    );
-  }
-
-  // Draw cat
-  if (
-    state.ateBeeAtFrameNum === state.frameNum - 1 ||
-    state.ateBeeAtFrameNum === state.frameNum - 3 ||
-    state.ateBeeAtFrameNum === state.frameNum - 5
-  ) {
-    // Draw electrocuted cat
-    draw(
-      imageEls.catSprite,
-      153,
-      0,
-      29,
-      SPRITE_H,
-      worldXToScreenX(state.catWorldX),
-      worldHeightToScreenY(state.catHeight) - SPRITE_H
-    );
-  } else if (state.jumpFrameNum && state.frameNum - state.jumpFrameNum < 3) {
-    // Draw half-jumping cat
-    draw(
-      imageEls.catSprite,
-      SPRITE_W * 4,
-      0,
-      28,
-      SPRITE_H,
-      worldXToScreenX(state.catWorldX) + 1,
-      worldHeightToScreenY(state.catHeight) - SPRITE_H
-    );
-  } else if (state.catHeight != 0) {
-    // Draw jumping cat
-    draw(
-      imageEls.catSprite,
-      124,
-      0,
-      29,
-      SPRITE_H,
-      worldXToScreenX(state.catWorldX) + 1,
-      worldHeightToScreenY(state.catHeight) - SPRITE_H
-    );
-  } else {
-    draw(
-      imageEls.catSprite,
-      SPRITE_W * (state.frameNum % SPRITE_NUM_FRAMES),
-      0,
-      SPRITE_W,
-      SPRITE_H,
-      worldXToScreenX(state.catWorldX) + 4,
-      worldHeightToScreenY(state.catHeight) - SPRITE_H
-    );
-  }
-
-  for (let butterfly of state.butterflies) {
-    draw(
-      imageEls.butterfly,
-      BUTTERFLY_SPRITE_W * (Math.round(state.frameNum / 3) % 2),
-      0,
-      BUTTERFLY_SPRITE_W,
-      BUTTERFLY_SPRITE_H,
-      20 + (butterfly.worldX - state.catWorldX),
-      worldHeightToScreenY(butterfly.height) - BUTTERFLY_SPRITE_H
-    );
-  }
-
-  // Draw bees
-  for (let bee of state.bees) {
-    draw(
-      imageEls.bee,
-      BEE_SPRITE_W * (state.frameNum % 2),
-      0,
-      BEE_SPRITE_W,
-      BEE_SPRITE_H,
-      20 + (bee.worldX - state.catWorldX),
-      worldHeightToScreenY(bee.height) - BEE_SPRITE_H
-    );
-  }
-
-  // Draw foreground
-  const fgScreenX = -((state.catWorldX * 2) % BG_W);
-  for (let i = 0; i < 5; i++) {
-    draw(
-      imageEls.foreground,
-      0,
-      0,
-      BG_W,
-      BG_H,
-      fgScreenX + BG_W * i,
-      worldHeightToScreenY(0) - 32
-    );
-  }
-
-  // Draw hit boxes (DEBUG)
-  if (DRAW_HIT_BOXES) {
-    function drawHitBox(color, hitBox) {
-      drawRect(
-        color,
-        worldXToScreenX(hitBox.left),
-        worldHeightToScreenY(hitBox.top),
-        hitBox.right - hitBox.left,
-        hitBox.top - hitBox.bottom
+    // Draw ground, scrolls with cat
+    const bgScreenX = -(state.catWorldX % BG_W);
+    for (let i = 0; i < 5; i++) {
+      draw(
+        imageEls.background,
+        0,
+        0,
+        BG_W,
+        BG_H,
+        bgScreenX + BG_W * i,
+        worldHeightToScreenY(0) - 32
       );
     }
-    const catHitBox = getCatHitBox();
-    drawHitBox("hsla(0,100%,50%,50%)", getCatHitBox());
-    drawHitBox("hsla(200,100%,50%,50%)", getCatFeetHitBox());
-    for (let bee of state.bees) {
-      drawHitBox("hsla(0,100%,50%,50%)", getBeeHitBox(bee));
-    }
-    for (let b of state.butterflies) {
-      drawHitBox("hsla(0,100%,50%,50%)", getButterflyHitBox(b));
-    }
-  }
 
-  // Draw text
-  drawText(state.frameNum.toString(), 1, 1);
-
-  let livesToDraw = state.catLives;
-  let col = 0;
-  let row = 0;
-  while (livesToDraw > 0) {
-    draw(imageEls.heart, 0, 0, 8, 8, CANVAS_W - 8 * (col + 1), 8 * row);
-    if (col == 8) {
-      col = 0;
-      row++;
+    // Draw cat
+    if (
+      state.ateBeeAtFrameNum === state.frameNum - 1 ||
+      state.ateBeeAtFrameNum === state.frameNum - 3 ||
+      state.ateBeeAtFrameNum === state.frameNum - 5
+    ) {
+      // Draw electrocuted cat
+      draw(
+        imageEls.catSprite,
+        153,
+        0,
+        29,
+        SPRITE_H,
+        worldXToScreenX(state.catWorldX),
+        worldHeightToScreenY(state.catHeight) - SPRITE_H
+      );
+    } else if (state.jumpFrameNum && state.frameNum - state.jumpFrameNum < 3) {
+      // Draw half-jumping cat
+      draw(
+        imageEls.catSprite,
+        SPRITE_W * 4,
+        0,
+        28,
+        SPRITE_H,
+        worldXToScreenX(state.catWorldX) + 1,
+        worldHeightToScreenY(state.catHeight) - SPRITE_H
+      );
+    } else if (state.catHeight != 0) {
+      // Draw jumping cat
+      draw(
+        imageEls.catSprite,
+        124,
+        0,
+        29,
+        SPRITE_H,
+        worldXToScreenX(state.catWorldX) + 1,
+        worldHeightToScreenY(state.catHeight) - SPRITE_H
+      );
     } else {
-      col++;
+      draw(
+        imageEls.catSprite,
+        SPRITE_W * (state.frameNum % SPRITE_NUM_FRAMES),
+        0,
+        SPRITE_W,
+        SPRITE_H,
+        worldXToScreenX(state.catWorldX) + 4,
+        worldHeightToScreenY(state.catHeight) - SPRITE_H
+      );
     }
-    livesToDraw--;
+
+    for (let butterfly of state.butterflies) {
+      draw(
+        imageEls.butterfly,
+        BUTTERFLY_SPRITE_W * (Math.round(state.frameNum / 3) % 2),
+        0,
+        BUTTERFLY_SPRITE_W,
+        BUTTERFLY_SPRITE_H,
+        20 + (butterfly.worldX - state.catWorldX),
+        worldHeightToScreenY(butterfly.height) - BUTTERFLY_SPRITE_H
+      );
+    }
+
+    // Draw bees
+    for (let bee of state.bees) {
+      draw(
+        imageEls.bee,
+        BEE_SPRITE_W * (state.frameNum % 2),
+        0,
+        BEE_SPRITE_W,
+        BEE_SPRITE_H,
+        20 + (bee.worldX - state.catWorldX),
+        worldHeightToScreenY(bee.height) - BEE_SPRITE_H
+      );
+    }
+
+    // Draw foreground
+    const fgScreenX = -((state.catWorldX * 2) % BG_W);
+    for (let i = 0; i < 5; i++) {
+      draw(
+        imageEls.foreground,
+        0,
+        0,
+        BG_W,
+        BG_H,
+        fgScreenX + BG_W * i,
+        worldHeightToScreenY(0) - 32
+      );
+    }
+
+    // Draw hit boxes (DEBUG)
+    if (DRAW_HIT_BOXES) {
+      function drawHitBox(color, hitBox) {
+        drawRect(
+          color,
+          worldXToScreenX(hitBox.left),
+          worldHeightToScreenY(hitBox.top),
+          hitBox.right - hitBox.left,
+          hitBox.top - hitBox.bottom
+        );
+      }
+      const catHitBox = getCatHitBox();
+      drawHitBox("hsla(0,100%,50%,50%)", getCatHitBox());
+      drawHitBox("hsla(200,100%,50%,50%)", getCatFeetHitBox());
+      for (let bee of state.bees) {
+        drawHitBox("hsla(0,100%,50%,50%)", getBeeHitBox(bee));
+      }
+      for (let b of state.butterflies) {
+        drawHitBox("hsla(0,100%,50%,50%)", getButterflyHitBox(b));
+      }
+    }
+
+    // Draw text
+    drawText(state.frameNum.toString(), 1, 1);
+
+    let livesToDraw = state.catLives;
+    let col = 0;
+    let row = 0;
+    while (livesToDraw > 0) {
+      draw(imageEls.heart, 0, 0, 8, 8, CANVAS_W - 8 * (col + 1), 8 * row);
+      if (col == 8) {
+        col = 0;
+        row++;
+      } else {
+        col++;
+      }
+      livesToDraw--;
+    }
   }
 }
 
@@ -457,7 +475,7 @@ function doCalcs() {
 
     // Introduce future bees (important: in order)
     const startBeeGap = 50;
-    const hardestBeeGap = 20;
+    const hardestBeeGap = 30;
     const avgBeeGap = Math.max(
       hardestBeeGap,
       startBeeGap - Math.round(state.catWorldX / 400)
@@ -551,7 +569,7 @@ imageEls.catSprite.addEventListener("load", () => {
     doFrame();
     let loopSpeed = 40;
     if (state.mode === "playing") {
-      loopSpeed = Math.max(10, 40 - Math.floor(state.frameNum/200));
+      loopSpeed = Math.max(10, 40 - Math.floor(state.frameNum / 300));
     }
     window.setTimeout(() => window.requestAnimationFrame(loop), loopSpeed);
   }
