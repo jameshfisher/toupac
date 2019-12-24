@@ -1,5 +1,3 @@
-move hearts to the top right
-
 animated bees and butterflies
 
 

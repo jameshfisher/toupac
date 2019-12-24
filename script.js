@@ -5,6 +5,7 @@ const SPRITE_SPEED_PX = 2;
 
 const JUMP_SPRITE_W = 32;
 
+const BEE_SPRITE_W = 11;
 const BEE_SPRITE_H = 10;
 
 const BG_W = 48;
@@ -45,7 +46,7 @@ treesImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355";
 const beeImageEl = new Image();
 beeImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577014863052";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427";
 const butterflyImageEl = new Image();
 butterflyImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577035563272";
@@ -316,10 +317,10 @@ function drawState() {
   for (let bee of state.bees) {
     draw(
       beeImageEl,
+      BEE_SPRITE_W * (state.frameNum%2),
       0,
-      0,
-      11,
-      10,
+      BEE_SPRITE_W,
+      BEE_SPRITE_H,
       20 + (bee.worldX - state.catWorldX),
       worldHeightToScreenY(bee.height) - BEE_SPRITE_H
     );
@@ -369,7 +370,7 @@ function drawState() {
   let row = 0;
   while (livesToDraw > 0) {
     draw(heartImageEl, 0, 0, 8, 8, CANVAS_W -8 * (col+1), 8*row);
-    if (col == 9) {
+    if (col == 8) {
       col = 0;
       row++;
     } else {
