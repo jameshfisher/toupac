@@ -549,7 +549,11 @@ function doFrame() {
 imageEls.catSprite.addEventListener("load", () => {
   function loop() {
     doFrame();
-    window.setTimeout(() => window.requestAnimationFrame(loop), 40);
+    const loopSpeed = 40;
+    if (state.mode === "playing") {
+      loopSpeed = 40 + 
+    }
+    window.setTimeout(() => window.requestAnimationFrame(loop), loopSpeed);
   }
   window.requestAnimationFrame(loop);
 });

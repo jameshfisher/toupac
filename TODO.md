@@ -1,6 +1,3 @@
-DOING: wait for resources to load! including music!
-
-music doesn't play because it's not a "click" - require a click one time on start
 
 Main menu static image
 
