@@ -138,6 +138,8 @@ function stopBackgroundMusic() {
   backgroundMusicEl.pause();
 }
 
+let hasClicked = false;
+
 let state = {};
 
 function startNewGame() {
@@ -237,18 +239,12 @@ function boxDidBounce(b1, b2) {
 const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
 const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
-function isLoading() {
-  for (let imageEl of imageEls) {
-    imageEl
-  }
-}
-
 function drawState() {
   if (state.mode === "menu") {
     ctx.fillStyle = "green";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-    if (isLoading()) {
-      drawText("LOADING...", 1, 1);
+    if (!hasClicked) {
+      drawText("PLEASE CLICK...", 1, 1);
     } else {
       drawText("LES AVENTURES DE TOUPAC", 1, 1);
     }
@@ -561,7 +557,7 @@ imageEls.catSprite.addEventListener("load", () => {
 const onTap = () => {
   if (state.mode === "playing") {
     state.jumpRequestedAtFrameNum = state.frameNum;
-  } else if (state.mode === "menu") {
+  } else if (state.mode === "menu" && hasClicked) {
     startNewGame();
   }
 };
