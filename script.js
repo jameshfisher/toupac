@@ -549,9 +549,9 @@ function doFrame() {
 imageEls.catSprite.addEventListener("load", () => {
   function loop() {
     doFrame();
-    const loopSpeed = 40;
+    let loopSpeed = 40;
     if (state.mode === "playing") {
-      loopSpeed = 40 + 
+      loopSpeed = Math.max(10, 40 - Math.floor(state.frameNum/200));
     }
     window.setTimeout(() => window.requestAnimationFrame(loop), loopSpeed);
   }
