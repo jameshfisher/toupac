@@ -37,13 +37,13 @@ function letterboxCanvas() {
     canvasEl.style.height = "100%";
     canvasEl.style.width = "unset";
     const canvasWidth = window.innerHeight * canvasRatio;
-    canvasEl.style.paddingLeft = ((window.innerWidth-canvasWidth)/2)+"px";
+    canvasEl.style.paddingLeft = (window.innerWidth - canvasWidth) / 2 + "px";
     canvasEl.style.paddingTop = "0px";
   } else {
     canvasEl.style.width = "100%";
     canvasEl.style.height = "unset";
     const canvasHeight = window.innerWidth / canvasRatio;
-    canvasEl.style.paddingTop = ((window.innerHeight-canvasHeight)/2)+"px";
+    canvasEl.style.paddingTop = (window.innerHeight - canvasHeight) / 2 + "px";
     canvasEl.style.paddingLeft = "0px";
   }
 }
@@ -53,49 +53,30 @@ letterboxCanvas();
 const ctx = canvasEl.getContext("2d");
 
 const imageEls = {};
-for ([name, url] of Object.entries({
-  catSprite: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349",
-  background: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768",
-  foreground: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044",
-  horizon: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898",
-  trees: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355",
-  bee: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427",
-  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149785588",
-  ascii: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441",
-  heart: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680",
+for (let [name, url] of Object.entries({
+  catSprite:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349",
+  background:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768",
+  foreground:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044",
+  horizon:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898",
+  trees:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355",
+  bee:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427",
+  butterfly:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149785588",
+  ascii:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441",
+  heart:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680"
 })) {
   const img = new Image();
   img.src = url;
   imageEls[name] = img;
 }
-
-const catSpriteImageEl = new Image();
-catSpriteImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349";
-const backgroundImageEl = new Image();
-backgroundImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768";
-const foregroundImageEl = new Image();
-foregroundImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044";
-const horizonImageEl = new Image();
-horizonImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898";
-const treesImageEl = new Image();
-treesImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355";
-const beeImageEl = new Image();
-beeImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427";
-const butterflyImageEl = new Image();
-butterflyImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149785588";
-const asciiImageEl = new Image();
-asciiImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441";
-const heartImageEl = new Image();
-heartImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680";
 
 function draw(imageEl, sx, sy, sw, sh, dx, dy) {
   ctx.drawImage(imageEl, sx, sy, sw, sh, dx, dy, sw, sh);
@@ -111,7 +92,7 @@ function drawText(text, sx, sy) {
     const charCode = text.charCodeAt(i);
     const row = Math.floor(charCode / 16);
     const col = charCode % 16;
-    draw(asciiImageEl, col * 8, row * 8, 8, 8, 8 * i + sx, sy);
+    draw(imageEls.ascii, col * 8, row * 8, 8, 8, 8 * i + sx, sy);
   }
 }
 
@@ -257,7 +238,9 @@ const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
 const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
 function isLoading() {
-  
+  for (let imageEl of imageEls) {
+    imageEl
+  }
 }
 
 function drawState() {
@@ -266,8 +249,8 @@ function drawState() {
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     if (isLoading()) {
       drawText("LOADING...", 1, 1);
-    } else {   
-      drawText("LES AVENTURES DE TOUPAC", 1, 1); 
+    } else {
+      drawText("LES AVENTURES DE TOUPAC", 1, 1);
     }
     return;
   }
@@ -277,19 +260,19 @@ function drawState() {
 
   // Horizon, doesn't move
   for (let i = 0; i < 5; i++) {
-    draw(horizonImageEl, 0, 0, 48, 96, 48 * i, 0);
+    draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
   }
 
   const treesScreenX = -(Math.round(state.catWorldX / 2) % BG_W);
   for (let i = 0; i < 5; i++) {
-    draw(treesImageEl, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
+    draw(imageEls.trees, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
   }
 
   // Draw ground, scrolls with cat
   const bgScreenX = -(state.catWorldX % BG_W);
   for (let i = 0; i < 5; i++) {
     draw(
-      backgroundImageEl,
+      imageEls.background,
       0,
       0,
       BG_W,
@@ -315,31 +298,31 @@ function drawState() {
       worldXToScreenX(state.catWorldX),
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
-  } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 3) {
-   // Draw half-jumping cat
+  } else if (state.jumpFrameNum && state.frameNum - state.jumpFrameNum < 3) {
+    // Draw half-jumping cat
     draw(
       imageEls.catSprite,
       SPRITE_W * 4,
       0,
       28,
       SPRITE_H,
-      worldXToScreenX(state.catWorldX)+1,
+      worldXToScreenX(state.catWorldX) + 1,
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else if (state.catHeight != 0) {
     // Draw jumping cat
     draw(
-      catSpriteImageEl,
+      imageEls.catSprite,
       124,
       0,
       29,
       SPRITE_H,
-      worldXToScreenX(state.catWorldX)+1,
+      worldXToScreenX(state.catWorldX) + 1,
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else {
     draw(
-      catSpriteImageEl,
+      imageEls.catSprite,
       SPRITE_W * (state.frameNum % SPRITE_NUM_FRAMES),
       0,
       SPRITE_W,
@@ -351,8 +334,8 @@ function drawState() {
 
   for (let butterfly of state.butterflies) {
     draw(
-      butterflyImageEl,
-      BUTTERFLY_SPRITE_W * (Math.round(state.frameNum/3)%2),
+      imageEls.butterfly,
+      BUTTERFLY_SPRITE_W * (Math.round(state.frameNum / 3) % 2),
       0,
       BUTTERFLY_SPRITE_W,
       BUTTERFLY_SPRITE_H,
@@ -364,8 +347,8 @@ function drawState() {
   // Draw bees
   for (let bee of state.bees) {
     draw(
-      beeImageEl,
-      BEE_SPRITE_W * (state.frameNum%2),
+      imageEls.bee,
+      BEE_SPRITE_W * (state.frameNum % 2),
       0,
       BEE_SPRITE_W,
       BEE_SPRITE_H,
@@ -378,7 +361,7 @@ function drawState() {
   const fgScreenX = -((state.catWorldX * 2) % BG_W);
   for (let i = 0; i < 5; i++) {
     draw(
-      foregroundImageEl,
+      imageEls.foreground,
       0,
       0,
       BG_W,
@@ -417,7 +400,7 @@ function drawState() {
   let col = 0;
   let row = 0;
   while (livesToDraw > 0) {
-    draw(heartImageEl, 0, 0, 8, 8, CANVAS_W -8 * (col+1), 8*row);
+    draw(imageEls.heart, 0, 0, 8, 8, CANVAS_W - 8 * (col + 1), 8 * row);
     if (col == 8) {
       col = 0;
       row++;
@@ -567,8 +550,7 @@ function doFrame() {
   drawState();
 }
 
-// TODO wait for backgroundImageEl
-catSpriteImageEl.addEventListener("load", () => {
+imageEls.catSprite.addEventListener("load", () => {
   function loop() {
     doFrame();
     window.setTimeout(() => window.requestAnimationFrame(loop), 40);
@@ -576,7 +558,7 @@ catSpriteImageEl.addEventListener("load", () => {
   window.requestAnimationFrame(loop);
 });
 
-const onClick = () => {
+const onTap = () => {
   if (state.mode === "playing") {
     state.jumpRequestedAtFrameNum = state.frameNum;
   } else if (state.mode === "menu") {
@@ -586,5 +568,8 @@ const onClick = () => {
 
 // "click" event causes delay,
 // due to waiting for mouseup, then waiting to ensure non-double-click
-document.body.addEventListener("mousedown", onClick);
-document.body.addEventListener("touchstart", onClick);
+document.body.addEventListener("mousedown", onTap);
+document.body.addEventListener("touchstart", onTap);
+document.body.addEventListener("click", () => {
+  hasClicked = true;
+});

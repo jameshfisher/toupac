@@ -1,5 +1,7 @@
 DOING: wait for resources to load! including music!
 
+music doesn't play because it's not a "click" - require a click one time on start
+
 Main menu static image
 
 "play" button
@@ -16,3 +18,5 @@ make it a web app
   with a toupac head icon
 
 music doesn't play on start
+
+game should get harder by getting faster, not by adding more bees
