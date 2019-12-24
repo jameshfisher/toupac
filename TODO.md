@@ -1,6 +1,3 @@
-animated bees and butterflies
-
-
 Main menu "play" button
 Main menu top score
 Main menu brief rules
