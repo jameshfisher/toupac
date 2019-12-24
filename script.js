@@ -73,7 +73,7 @@ for (let [name, url] of Object.entries({
   heart:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680",
   border:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fborder.png?v=1577202914499"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fborder.png?v=1577203659702"
 })) {
   const img = new Image();
   img.src = url;
@@ -162,7 +162,8 @@ function startNewGame() {
 
 function goToMenu() {
   state = {
-    mode: "menu"
+    mode: "menu",
+    catWorldX: 0  // Hack: used for scrolling background
   };
   stopBackgroundMusic();
 }
@@ -247,11 +248,11 @@ function drawState() {
     for (let i = 0; i < 5; i++) {
       draw(imageEls.horizon, 0, 0, 48, 96, 48 * i, 0);
     }
-    const treesScreenX = 0;
+    const treesScreenX = -(Math.round(state.catWorldX / 2) % BG_W);
     for (let i = 0; i < 5; i++) {
       draw(imageEls.trees, 0, 0, 48, 96, treesScreenX + BG_W * i, 0);
     }
-    const bgScreenX = 0;
+    const bgScreenX = -(state.catWorldX % BG_W);
     for (let i = 0; i < 5; i++) {
       draw(
         imageEls.background,
@@ -266,7 +267,8 @@ function drawState() {
     
     draw(imageEls.border, 0, 0, CANVAS_W, CANVAS_H, 0, 0);
 
-    drawText("CLICK TO START", 40, 60);
+    drawText("TAP TO PLAY", 40, 60);
+    drawText("HIGH SCORE: 2356", 40, 70);
     
   } else if (state.mode === "playing") {
     // Horizon, doesn't move
@@ -429,6 +431,7 @@ const jumpRequested = () =>
 
 function doCalcs() {
   if (state.mode === "menu") {
+    state.catWorldX += 1;
     return;
   } else if (state.mode === "playing") {
     if (state.catDiedAtFrameNum) {
