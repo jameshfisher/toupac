@@ -365,7 +365,7 @@ function drawState() {
   drawText(state.frameNum.toString(), 1, 1);
 
   for (let i = 0; i < state.catLives; i++) {
-    draw(heartImageEl, 0, 0, 8, 8, 8 * i, 10);
+    draw(heartImageEl, 0, 0, 8, 8, CANVAS_W -8 * (i+1), 1);
   }
 }
 

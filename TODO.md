@@ -1,6 +1,3 @@
-
-When jumping on a bee, brief animation of standing on the bee
-
 move hearts to the top right
 
 animated bees and butterflies
