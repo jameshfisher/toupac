@@ -282,11 +282,11 @@ function drawState() {
     draw(imageEls.border, 0, 0, CANVAS_W, CANVAS_H, 0, 0);
 
     if (Math.round(state.catWorldX/10) % 2) {
-      drawTextCenter("TAP TO PLAY!", 60); 
+      drawTextCenter("CLIQUEZ POUR JOUER!", 60); 
     }
     const highScore = getHighScore();
     if (highScore) {
-    drawTextCenter("HIGH SCORE: " + highScore, 80); 
+    drawTextCenter("MEILLEUR: " + highScore, 80); 
     }
     
   } else if (state.mode === "playing") {
