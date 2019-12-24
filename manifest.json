@@ -3,14 +3,14 @@
   "name": "Les Aventures de Toupac",
   "icons": [
     {
-      "src": "/images/icons-192.png",
+      "src": "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ficon_192.png?v=1577211541411",
       "type": "image/png",
       "sizes": "192x192"
     }
   ],
-  "start_url": "/maps/?source=pwa",
-  "background_color": "#3367D6",
+  "start_url": "/",
+  "background_color": "black",
   "display": "standalone",
-  "scope": "/maps/",
-  "theme_color": "#3367D6"
+  "scope": "/",
+  "theme_color": "black"
 }
