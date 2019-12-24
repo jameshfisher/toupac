@@ -1,5 +1,3 @@
-on first play, it doesn't record score, or play victory sound!
-
 Main menu brief rules
 
 Main menu music
