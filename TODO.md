@@ -1,6 +1,13 @@
-Main menu "play" button
+fix the letterboxing - just use JS
+
+Main menu static image
+
+"play" button
+
 Main menu top score
+
 Main menu brief rules
+
 Main menu music
 
 Glory sound when getting new high score

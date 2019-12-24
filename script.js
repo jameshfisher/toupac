@@ -30,6 +30,18 @@ const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
 
+window.onresize = () => {
+  const canvasRatio = CANVAS_W / CANVAS_H;
+  const viewportRatio = window.innerWidth / window.innerHeight;
+  if (viewportRatio > canvasRatio) {
+    canvasEl.style.height = "100%";
+    canvasEl.style.width = "unset";
+  } else {
+    canvasEl.style.width = "100%";
+    canvasEl.style.height = "unset";
+  }
+};
+
 const ctx = canvasEl.getContext("2d");
 
 const catSpriteImageEl = new Image();
