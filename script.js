@@ -259,33 +259,33 @@ function drawState() {
     // Draw electrocuted cat
     draw(
       catSpriteImageEl,
-      130,
+      153,
       0,
-      32,
+      29,
       SPRITE_H,
       worldXToScreenX(state.catWorldX),
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
-  } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 2) {
+  } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 3) {
    // Draw half-jumping cat
     draw(
       catSpriteImageEl,
       SPRITE_W * 4,
       0,
-      29,
+      28,
       SPRITE_H,
-      worldXToScreenX(state.catWorldX) + 4,
+      worldXToScreenX(state.catWorldX)+1,
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else if (state.catHeight != 0) {
     // Draw jumping cat
     draw(
       catSpriteImageEl,
-      SPRITE_W * 4,
+      124,
       0,
-      JUMP_SPRITE_W,
+      29,
       SPRITE_H,
-      worldXToScreenX(state.catWorldX),
+      worldXToScreenX(state.catWorldX)+1,
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else {
