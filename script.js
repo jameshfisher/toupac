@@ -98,6 +98,12 @@ function drawText(text, sx, sy) {
   }
 }
 
+function drawTextCenter(text, sy) {
+  const textWidth = text.length*8;
+  const sx = Math.round((CANVAS_W-textWidth)/2);
+  drawText(text, sx, sy);
+}
+
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 async function loadSound(url) {
@@ -267,8 +273,10 @@ function drawState() {
     
     draw(imageEls.border, 0, 0, CANVAS_W, CANVAS_H, 0, 0);
 
-    drawText("TAP TO PLAY", 40, 60);
-    drawText("HIGH SCORE: 2356", 40, 70);
+    if (Math.round(state.catWorldX/10) % 2) {
+      drawTextCenter("TAP TO PLAY!", 60); 
+    }
+    drawTextCenter("HIGH SCORE: 2356", 80);
     
   } else if (state.mode === "playing") {
     // Horizon, doesn't move
@@ -435,6 +443,7 @@ function doCalcs() {
     return;
   } else if (state.mode === "playing") {
     if (state.catDiedAtFrameNum) {
+      state.frameNum
       goToMenu();
       return;
     }
