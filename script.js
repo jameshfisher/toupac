@@ -246,6 +246,10 @@ function boxDidBounce(b1, b2) {
 const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
 const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
+function getHighScore() {
+  return localStorage.getItem("high_score");
+}
+
 function drawState() {
   if (state.mode === "menu") {
     ctx.fillStyle = "green";
@@ -276,7 +280,10 @@ function drawState() {
     if (Math.round(state.catWorldX/10) % 2) {
       drawTextCenter("TAP TO PLAY!", 60); 
     }
-    drawTextCenter("HIGH SCORE: 2356", 80);
+    const highScore = getHighScore();
+    if (highScore) {
+    drawTextCenter("HIGH SCORE: " + highScore, 80); 
+    }
     
   } else if (state.mode === "playing") {
     // Horizon, doesn't move
@@ -443,7 +450,11 @@ function doCalcs() {
     return;
   } else if (state.mode === "playing") {
     if (state.catDiedAtFrameNum) {
-      state.frameNum
+      const score = state.frameNum;
+      const highScore = getHighScore();
+      if (highScore !== null && highScore < score) {
+        localStorage.setItem("high_score", score);
+      }
       goToMenu();
       return;
     }
