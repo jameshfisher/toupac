@@ -30,7 +30,7 @@ const ctx = canvasEl.getContext("2d");
 
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577130104644";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349";
 const backgroundImageEl = new Image();
 backgroundImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768";
@@ -267,17 +267,18 @@ function drawState() {
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 2) {
-   // Draw cat standing on bee briefly
+   // Draw half-jumping cat
     draw(
       catSpriteImageEl,
+      SPRITE_W * 4,
       0,
-      0,
-      SPRITE_W,
+      29,
       SPRITE_H,
       worldXToScreenX(state.catWorldX) + 4,
       worldHeightToScreenY(state.catHeight) - SPRITE_H
     );
   } else if (state.catHeight != 0) {
+    // Draw jumping cat
     draw(
       catSpriteImageEl,
       SPRITE_W * 4,
