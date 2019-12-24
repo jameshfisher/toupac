@@ -503,7 +503,7 @@ function doCalcs() {
 
     // Introduce future bees (important: in order)
     const startBeeGap = 60;
-    const hardestBeeGap = 40;
+    const hardestBeeGap = 35;
     const avgBeeGap = Math.max(
       hardestBeeGap,
       startBeeGap - Math.round(state.catWorldX / 400)
