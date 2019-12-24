@@ -128,7 +128,9 @@ for (const [name, url] of Object.entries({
   bee:
     "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204",
   electric:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_exp_medium10.wav?v=1577131384116"
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_exp_medium10.wav?v=1577131384116",
+  lose:
+    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sound_shutdown2.wav?v=1577205803077"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
@@ -454,6 +456,8 @@ function doCalcs() {
       const highScore = getHighScore();
       if (highScore !== null && highScore < score) {
         localStorage.setItem("high_score", score);
+      } else {
+        playSound("lose");
       }
       goToMenu();
       return;
