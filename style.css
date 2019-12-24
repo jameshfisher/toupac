@@ -11,11 +11,9 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: red;
 }
 
 #canvaswrapper canvas {
   image-rendering: pixelated;
   /* Width and height controlled by JS to letterbox in the #canvaswrapper */
-  margin: auto;
 }

@@ -30,17 +30,25 @@ const canvasEl = document.getElementById("canvas");
 canvasEl.width = CANVAS_W;
 canvasEl.height = CANVAS_H;
 
-window.onresize = () => {
+function letterboxCanvas() {
   const canvasRatio = CANVAS_W / CANVAS_H;
   const viewportRatio = window.innerWidth / window.innerHeight;
   if (viewportRatio > canvasRatio) {
     canvasEl.style.height = "100%";
     canvasEl.style.width = "unset";
+    const canvasWidth = window.innerHeight * canvasRatio;
+    canvasEl.style.paddingLeft = ((window.innerWidth-canvasWidth)/2)+"px";
+    canvasEl.style.paddingTop = "0px";
   } else {
     canvasEl.style.width = "100%";
     canvasEl.style.height = "unset";
+    const canvasHeight = window.innerWidth / canvasRatio;
+    canvasEl.style.paddingTop = ((window.innerHeight-canvasHeight)/2)+"px";
+    canvasEl.style.paddingLeft = "0px";
   }
-};
+}
+window.onresize = letterboxCanvas;
+letterboxCanvas();
 
 const ctx = canvasEl.getContext("2d");
 

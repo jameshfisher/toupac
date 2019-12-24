@@ -1,5 +1,7 @@
 fix the letterboxing - just use JS
 
+wait for resources to load! including music!
+
 Main menu static image
 
 "play" button
