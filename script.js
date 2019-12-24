@@ -364,8 +364,18 @@ function drawState() {
   // Draw text
   drawText(state.frameNum.toString(), 1, 1);
 
-  for (let i = 0; i < state.catLives; i++) {
-    draw(heartImageEl, 0, 0, 8, 8, CANVAS_W -8 * (i+1), 1);
+  let livesToDraw = state.catLives;
+  let col = 0;
+  let row = 0;
+  while (livesToDraw > 0) {
+    draw(heartImageEl, 0, 0, 8, 8, CANVAS_W -8 * (col+1), 8*row);
+    if (col == 9) {
+      col = 0;
+      row++;
+    } else {
+      col++;
+    }
+    livesToDraw--;
   }
 }
 
