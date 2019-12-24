@@ -6,6 +6,11 @@
       "src": "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ficon_192.png?v=1577211541411",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ficon_512.png?v=1577211972492",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/",
