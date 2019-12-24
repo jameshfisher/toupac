@@ -8,6 +8,9 @@ const JUMP_SPRITE_W = 32;
 const BEE_SPRITE_W = 11;
 const BEE_SPRITE_H = 10;
 
+const BUTTERFLY_SPRITE_W = 16;
+const BUTTERFLY_SPRITE_H = 16;
+
 const BG_W = 48;
 const BG_H = 96;
 
@@ -49,7 +52,7 @@ beeImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427";
 const butterflyImageEl = new Image();
 butterflyImageEl.src =
-  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577035563272";
+  "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149463769";
 const asciiImageEl = new Image();
 asciiImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441";
@@ -304,12 +307,12 @@ function drawState() {
   for (let butterfly of state.butterflies) {
     draw(
       butterflyImageEl,
+      BUTTERFLY_SPRITE_W * (Math.round(state.frameNum/3)%2),
       0,
-      0,
-      16,
-      16,
+      BUTTERFLY_SPRITE_W,
+      BUTTERFLY_SPRITE_H,
       20 + (butterfly.worldX - state.catWorldX),
-      worldHeightToScreenY(butterfly.height) - 16
+      worldHeightToScreenY(butterfly.height) - BUTTERFLY_SPRITE_H
     );
   }
 
