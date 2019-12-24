@@ -52,6 +52,23 @@ letterboxCanvas();
 
 const ctx = canvasEl.getContext("2d");
 
+const imageEls = {};
+for ([name, url] of Object.entries({
+  catSprite: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349",
+  background: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768",
+  foreground: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044",
+  horizon: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898",
+  trees: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355",
+  bee: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427",
+  butterfly: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149785588",
+  ascii: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441",
+  heart: "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680",
+})) {
+  const img = new Image();
+  img.src = url;
+  imageEls[name] = img;
+}
+
 const catSpriteImageEl = new Image();
 catSpriteImageEl.src =
   "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349";
@@ -239,11 +256,19 @@ function boxDidBounce(b1, b2) {
 const worldXToScreenX = worldX => worldX - state.catWorldX + 20;
 const worldHeightToScreenY = worldHeight => GROUND - worldHeight;
 
+function isLoading() {
+  
+}
+
 function drawState() {
   if (state.mode === "menu") {
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "green";
     ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
-    drawText("LES AVENTURES DE TOUPAC", 1, 1);
+    if (isLoading()) {
+      drawText("LOADING...", 1, 1);
+    } else {   
+      drawText("LES AVENTURES DE TOUPAC", 1, 1); 
+    }
     return;
   }
 
@@ -282,7 +307,7 @@ function drawState() {
   ) {
     // Draw electrocuted cat
     draw(
-      catSpriteImageEl,
+      imageEls.catSprite,
       153,
       0,
       29,
@@ -293,7 +318,7 @@ function drawState() {
   } else if (state.jumpFrameNum && state.frameNum-state.jumpFrameNum < 3) {
    // Draw half-jumping cat
     draw(
-      catSpriteImageEl,
+      imageEls.catSprite,
       SPRITE_W * 4,
       0,
       28,
