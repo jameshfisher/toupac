@@ -99,8 +99,8 @@ function drawText(text, sx, sy) {
 }
 
 function drawTextCenter(text, sy) {
-  const textWidth = text.length*8;
-  const sx = Math.round((CANVAS_W-textWidth)/2);
+  const textWidth = text.length * 8;
+  const sx = Math.round((CANVAS_W - textWidth) / 2);
   drawText(text, sx, sy);
 }
 
@@ -167,13 +167,15 @@ function startNewGame() {
     butterflies: []
   };
   restartBackgroundMusic();
-  document.documentElement.requestFullscreen();
+  document.documentElement.requestFullscreen().then(() => {
+    screen.orientation.lock("landscape");
+  });
 }
 
 function goToMenu() {
   state = {
     mode: "menu",
-    catWorldX: 0  // Hack: used for scrolling background
+    catWorldX: 0 // Hack: used for scrolling background
   };
   stopBackgroundMusic();
 }
@@ -278,17 +280,16 @@ function drawState() {
         worldHeightToScreenY(0) - 32
       );
     }
-    
+
     draw(imageEls.border, 0, 0, CANVAS_W, CANVAS_H, 0, 0);
 
-    if (Math.round(state.catWorldX/10) % 2) {
-      drawTextCenter("CLIQUEZ POUR JOUER!", 60); 
+    if (Math.round(state.catWorldX / 10) % 2) {
+      drawTextCenter("CLIQUEZ POUR JOUER!", 60);
     }
     const highScore = getHighScore();
     if (highScore) {
-    drawTextCenter("MEILLEUR: " + highScore, 80); 
+      drawTextCenter("MEILLEUR: " + highScore, 80);
     }
-    
   } else if (state.mode === "playing") {
     // Horizon, doesn't move
     for (let i = 0; i < 5; i++) {
@@ -620,14 +621,20 @@ document.body.addEventListener("click", () => {
   }
 });
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/sw.js').then(function(registration) {
-      // Registration was successful
-      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    }, function(err) {
-      // registration failed :(
-      console.log('ServiceWorker registration failed: ', err);
-    });
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/sw.js").then(
+      function(registration) {
+        // Registration was successful
+        console.log(
+          "ServiceWorker registration successful with scope: ",
+          registration.scope
+        );
+      },
+      function(err) {
+        // registration failed :(
+        console.log("ServiceWorker registration failed: ", err);
+      }
+    );
   });
 }
