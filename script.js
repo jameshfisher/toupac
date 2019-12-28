@@ -55,25 +55,25 @@ const ctx = canvasEl.getContext("2d");
 const imageEls = {};
 for (let [name, url] of Object.entries({
   catSprite:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fcat-sprite.png?v=1577146059349",
+    "/cat-sprite.png",
   background:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbackground.png?v=1577140001768",
+    "/background.png",
   foreground:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fforeground.png?v=1577140027044",
+    "/foreground.png",
   horizon:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fhorizon.png?v=1577042333898",
+    "horizon.png",
   trees:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Ftrees.png?v=1577139224355",
+    "trees.png",
   bee:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbee.png?v=1577148605427",
+    "bee.png",
   butterfly:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fbutterfly.png?v=1577149785588",
+    "butterfly.png",
   ascii:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fascii.png?v=1577030301441",
+    "ascii.png",
   heart:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fheart.png?v=1577052658680",
+    "heart.png",
   border:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fborder.png?v=1577203659702"
+    "border.png"
 })) {
   const img = new Image();
   img.src = url;
@@ -120,19 +120,19 @@ function playBuffer(buffer) {
 const sounds = {};
 for (const [name, url] of Object.entries({
   jump:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump10.wav?v=1577047900066",
+    "/sfx_movement_jump10.wav",
   land:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_movement_jump9_landing.wav?v=1577049001196",
+    "/sfx_movement_jump9_landing.wav",
   butterfly:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_coin_double7.wav?v=1577049770730",
+    "/sfx_coin_double7.wav",
   bee:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sounds_error10.wav?v=1577051173204",
+    "/sfx_sounds_error10.wav",
   electric:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_exp_medium10.wav?v=1577131384116",
+    "/sfx_exp_medium10.wav",
   lose:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsfx_sound_shutdown2.wav?v=1577205803077",
+    "/sfx_sound_shutdown2.wav",
   win:
-    "https://cdn.glitch.com/45f0801f-7315-41ae-b12c-26a84073b9c6%2Fsawsquarenoise_-_07_-_Towel_Defence_Jingle_Win.mp3?v=1577206256642"
+    "/sawsquarenoise_-_07_-_Towel_Defence_Jingle_Win.mp3"
 }))
   sounds[name] = loadSound(url);
 async function playSound(name) {
